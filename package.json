@@ -1,0 +1,32 @@
+{
+  "name": "goflow",
+  "version": "0.1.0",
+  "description": "js client of GoFlow framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yangkequn/goflow-npm.git"
+  },
+  "keywords": [
+    "goflow",
+    "framework",
+    "microservice",
+    "monolithic"
+  ],
+  "author": "yangkequn",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/yangkequn/goflow-npm/issues"
+  },
+  "homepage": "https://github.com/yangkequn/goflow-npm#readme",
+  "dependencies": {
+    "@ygoe/msgpack": "^1.0.3",
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24"
+  }
+}
