@@ -1,8 +1,8 @@
 {
-  "name": "goflow",
-  "version": "0.1.0",
+  "name": "goflowclient",
+  "version": "0.1.2",
   "description": "js client of GoFlow framework",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest"
   },
