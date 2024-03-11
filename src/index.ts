@@ -25,7 +25,7 @@ class OptionClass {
     public RspTypeText = () => this.WithUrlValue("rsb", "-!TEXT");
     public RspTypeStream = () => this.WithUrlValue("rsb", "-!STREAM");
     //set redis DataSource of the request
-    public WithDataSource = (dataSourceName: string) => this.WithUrlValue("ds", encodeURIComponent("-!" + dataSourceName));
+    public WithDataSource = (dataSourceName: string) => this.WithUrlValue("ds", "-!" + encodeURIComponent(dataSourceName));
     public WithHost = (host: string) => {
         var ret = this.optionObject();
         ret.Host = host;
