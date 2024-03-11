@@ -68,7 +68,7 @@ var OptionClass = /** @class */ (function () {
         this.RspTypeText = function () { return _this.WithUrlValue("rsb", "-!TEXT"); };
         this.RspTypeStream = function () { return _this.WithUrlValue("rsb", "-!STREAM"); };
         //set redis DataSource of the request
-        this.WithDataSource = function (dataSourceName) { return _this.WithUrlValue("ds", encodeURIComponent(dataSourceName)); };
+        this.WithDataSource = function (dataSourceName) { return _this.WithUrlValue("ds", "-!" + encodeURIComponent(dataSourceName)); };
         this.WithHost = function (host) {
             var ret = _this.optionObject();
             ret.Host = host;
@@ -169,20 +169,20 @@ var urlGet = function (cmd, Key, Field, opt) {
 };
 exports.urlGet = urlGet;
 var time = function (opt) {
-    if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/TIME-!").concat(new Date().getTime()));
+    if (opt === void 0) { opt = exports.Option.WithDataSource("default"); }
+    return Req(opt).get("".concat(opt.ToHostString(), "/TIME-!null").concat(opt.ToParamString(), "?t=").concat(new Date().getTime()));
 };
 exports.time = time;
 var hExists = function (Key, Field, opt) {
     if (Field === void 0) { Field = ""; }
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/HEXISTS-!").concat(Key, "?F=").concat(encodeURIComponent(Field)));
+    return Req(opt).get("".concat(opt.ToHostString(), "/HEXISTS-!").concat(Key).concat(opt.ToParamString(), "?F=").concat(encodeURIComponent(Field)));
 };
 exports.hExists = hExists;
 var hset = function (Key, Field, data, opt) {
     if (Field === void 0) { Field = ""; }
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).put("".concat(opt.ToHostString(), "/HSET-!").concat(Key, "?F=").concat(encodeURIComponent(Field)), data);
+    return Req(opt).put("".concat(opt.ToHostString(), "/HSET-!").concat(Key).concat(opt.ToParamString(), "?F=").concat(encodeURIComponent(Field)), data);
 };
 exports.hset = hset;
 var get = function (Key, Field, opt) {
@@ -201,95 +201,95 @@ var hDel = function (Key, Field, opt) {
     if (Field === void 0) { Field = ""; }
     if (opt === void 0) { opt = exports.Option; }
     return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/, Req(opt).delete("".concat(opt.ToHostString(), "/HDEL-!").concat(Key, "?F=").concat(Field))];
+        return [2 /*return*/, Req(opt).delete("".concat(opt.ToHostString(), "/HDEL-!").concat(Key).concat(opt.ToParamString(), "?F=").concat(Field))];
     }); });
 };
 exports.hDel = hDel;
 var hGetAll = function (Key, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/HGETALL-!").concat(Key));
+    return Req(opt).get("".concat(opt.ToHostString(), "/HGETALL-!").concat(Key).concat(opt.ToParamString()));
 };
 exports.hGetAll = hGetAll;
 var hVals = function (Key, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/HVALS-!").concat(Key));
+    return Req(opt).get("".concat(opt.ToHostString(), "/HVALS-!").concat(Key).concat(opt.ToParamString()));
 };
 exports.hVals = hVals;
 var hKeys = function (Key, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/HKEYS-!").concat(Key));
+    return Req(opt).get("".concat(opt.ToHostString(), "/HKEYS-!").concat(Key).concat(opt.ToParamString()));
 };
 exports.hKeys = hKeys;
 var hRandField = function (Key, Count, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/HRANDFIELD-!").concat(Key, "?Count=").concat(Count));
+    return Req(opt).get("".concat(opt.ToHostString(), "/HRANDFIELD-!").concat(Key).concat(opt.ToParamString(), "?Count=").concat(Count));
 };
 exports.hRandField = hRandField;
 var hMGet = function (Key, Fields, opt) {
     if (Fields === void 0) { Fields = []; }
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/HMGET-!").concat(Key, "?F=").concat(encodeURIComponent(Fields.join(","))));
+    return Req(opt).get("".concat(opt.ToHostString(), "/HMGET-!").concat(Key).concat(opt.ToParamString(), "?F=").concat(encodeURIComponent(Fields.join(","))));
 };
 exports.hMGet = hMGet;
 var zRange = function (Key, Start, Stop, WITHSCORES, opt) {
     if (WITHSCORES === void 0) { WITHSCORES = false; }
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/ZRANGE-!").concat(Key, "?Start=").concat(Start, "&Stop=").concat(Stop, "&WITHSCORES=").concat(WITHSCORES));
+    return Req(opt).get("".concat(opt.ToHostString(), "/ZRANGE-!").concat(Key).concat(opt.ToParamString(), "?Start=").concat(Start, "&Stop=").concat(Stop, "&WITHSCORES=").concat(WITHSCORES));
 };
 exports.zRange = zRange;
 var zRevRange = function (Key, Start, Stop, WITHSCORES, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/ZREVRANGE-!").concat(Key, "?Start=").concat(Start, "&Stop=").concat(Stop, "&WITHSCORES=").concat(WITHSCORES));
+    return Req(opt).get("".concat(opt.ToHostString(), "/ZREVRANGE-!").concat(Key).concat(opt.ToParamString(), "?Start=").concat(Start, "&Stop=").concat(Stop, "&WITHSCORES=").concat(WITHSCORES));
 };
 exports.zRevRange = zRevRange;
 var zRank = function (Key, Member, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/ZRANK-!").concat(Key, "?Member=").concat(Member));
+    return Req(opt).get("".concat(opt.ToHostString(), "/ZRANK-!").concat(Key).concat(opt.ToParamString(), "?Member=").concat(Member));
 };
 exports.zRank = zRank;
 var zScore = function (Key, Member, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/ZSCORE-!").concat(Key, "?Member=").concat(Member));
+    return Req(opt).get("".concat(opt.ToHostString(), "/ZSCORE-!").concat(Key).concat(opt.ToParamString(), "?Member=").concat(Member));
 };
 exports.zScore = zScore;
 var zRangeByScore = function (Key, Min, Max, WITHSCORES, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/ZRANGEBYSCORE-!").concat(Key, "?Min=").concat(Min, "&Max=").concat(Max, "&WITHSCORES=").concat(WITHSCORES));
+    return Req(opt).get("".concat(opt.ToHostString(), "/ZRANGEBYSCORE-!").concat(Key).concat(opt.ToParamString(), "?Min=").concat(Min, "&Max=").concat(Max, "&WITHSCORES=").concat(WITHSCORES));
 };
 exports.zRangeByScore = zRangeByScore;
 var zRevRangeByScore = function (Key, Max, Min, WITHSCORES, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/ZREVRANGEBYSCORE-!").concat(Key, "?Min=").concat(Min, "&Max=").concat(Max, "&WITHSCORES=").concat(WITHSCORES));
+    return Req(opt).get("".concat(opt.ToHostString(), "/ZREVRANGEBYSCORE-!").concat(Key).concat(opt.ToParamString(), "?Min=").concat(Min, "&Max=").concat(Max, "&WITHSCORES=").concat(WITHSCORES));
 };
 exports.zRevRangeByScore = zRevRangeByScore;
 var zAdd = function (Key, Score, Member, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).post("".concat(opt.ToHostString(), "/ZADD-!").concat(Key, "?Score=").concat(Score), Member);
+    return Req(opt).post("".concat(opt.ToHostString(), "/ZADD-!").concat(Key).concat(opt.ToParamString(), "?Score=").concat(Score), Member);
 };
 exports.zAdd = zAdd;
 var zRem = function (Key, Member, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).delete("".concat(opt.ToHostString(), "/ZREM-!").concat(Key, "?Member=").concat(Member));
+    return Req(opt).delete("".concat(opt.ToHostString(), "/ZREM-!").concat(Key).concat(opt.ToParamString(), "?Member=").concat(Member));
 };
 exports.zRem = zRem;
 var zRemRangeByScore = function (Key, Min, Max, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).delete("".concat(opt.ToHostString(), "/ZREMRANGEBYSCORE-!").concat(Key, "?Min=").concat(Min, "&Max=").concat(Max));
+    return Req(opt).delete("".concat(opt.ToHostString(), "/ZREMRANGEBYSCORE-!").concat(Key).concat(opt.ToParamString(), "?Min=").concat(Min, "&Max=").concat(Max));
 };
 exports.zRemRangeByScore = zRemRangeByScore;
 var zCount = function (Key, Min, Max, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/ZCOUNT-!").concat(Key, "?Min=").concat(Min, "&Max=").concat(Max));
+    return Req(opt).get("".concat(opt.ToHostString(), "/ZCOUNT-!").concat(Key).concat(opt.ToParamString(), "?Min=").concat(Min, "&Max=").concat(Max));
 };
 exports.zCount = zCount;
 var zCard = function (Key, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/ZCARD-!").concat(Key));
+    return Req(opt).get("".concat(opt.ToHostString(), "/ZCARD-!").concat(Key).concat(opt.ToParamString()));
 };
 exports.zCard = zCard;
 var sIsMember = function (Key, Member, opt) {
     if (opt === void 0) { opt = exports.Option; }
-    return Req(opt).get("".concat(opt.ToHostString(), "/SISMEMBER-!").concat(Key, "?Member=").concat(Member));
+    return Req(opt).get("".concat(opt.ToHostString(), "/SISMEMBER-!").concat(Key).concat(opt.ToParamString(), "?Member=").concat(Member));
 };
 exports.sIsMember = sIsMember;
 var API = function (serviceName, data, opt) {
