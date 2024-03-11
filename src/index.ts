@@ -25,7 +25,7 @@ class OptionClass {
     public RspTypeText = () => this.WithUrlValue("rsb", "-!TEXT");
     public RspTypeStream = () => this.WithUrlValue("rsb", "-!STREAM");
     //set redis DataSource of the request
-    public WithDataSource = (dataSourceName: string) => this.WithUrlValue("ds", encodeURIComponent(dataSourceName));
+    public WithDataSource = (dataSourceName: string) => this.WithUrlValue("ds", encodeURIComponent("-!" + dataSourceName));
     public WithHost = (host: string) => {
         var ret = this.optionObject();
         ret.Host = host;
@@ -116,12 +116,14 @@ export const urlGet = (cmd = urlGetCmd.HGET, Key: string, Field: string = "", op
     var url = `${opt.ToHostString()}/${cmd}-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`;
     return url
 }
-export const time = (opt: OptionClass = Option) => Req(opt).get(`${opt.ToHostString()}/TIME-!${new Date().getTime()}`)
+export const time = (opt: OptionClass = Option.WithDataSource("default")) =>
+    Req(opt).get(`${opt.ToHostString()}/TIME-!null${opt.ToParamString()}?t=${new Date().getTime()}`)
+
 export const hExists = (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HEXISTS-!${Key}?F=${encodeURIComponent(Field)}`)
+    Req(opt).get(`${opt.ToHostString()}/HEXISTS-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`)
 
 export const hset = (Key: string, Field: string = "", data: any, opt: OptionClass = Option) =>
-    Req(opt).put(`${opt.ToHostString()}/HSET-!${Key}?F=${encodeURIComponent(Field)}`, data)
+    Req(opt).put(`${opt.ToHostString()}/HSET-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`, data)
 
 export const get = (Key: string, Field: string = "", opt: OptionClass = Option) =>
     Req(opt).get(`${opt.ToHostString()}/GET-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`)
@@ -130,58 +132,58 @@ export const hGet = (Key: string, Field: string = "", opt: OptionClass = Option)
     Req(opt).get(`${opt.ToHostString()}/HGET-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`)
 
 export const hDel = async (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.ToHostString()}/HDEL-!${Key}?F=${Field}`)
+    Req(opt).delete(`${opt.ToHostString()}/HDEL-!${Key}${opt.ToParamString()}?F=${Field}`)
 
 export const hGetAll = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HGETALL-!${Key}`)
+    Req(opt).get(`${opt.ToHostString()}/HGETALL-!${Key}${opt.ToParamString()}`)
 
 export const hVals = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HVALS-!${Key}`)
+    Req(opt).get(`${opt.ToHostString()}/HVALS-!${Key}${opt.ToParamString()}`)
 
 export const hKeys = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HKEYS-!${Key}`)
+    Req(opt).get(`${opt.ToHostString()}/HKEYS-!${Key}${opt.ToParamString()}`)
 
 export const hRandField = (Key: string, Count: number, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HRANDFIELD-!${Key}?Count=${Count}`)
+    Req(opt).get(`${opt.ToHostString()}/HRANDFIELD-!${Key}${opt.ToParamString()}?Count=${Count}`)
 
 export const hMGet = (Key: string, Fields: any[] = [], opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HMGET-!${Key}?F=${encodeURIComponent(Fields.join(","))}`)
+    Req(opt).get(`${opt.ToHostString()}/HMGET-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Fields.join(","))}`)
 
 export const zRange = (Key: string, Start: number, Stop: number, WITHSCORES: boolean = false, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZRANGE-!${Key}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.ToHostString()}/ZRANGE-!${Key}${opt.ToParamString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
 
 export const zRevRange = (Key: string, Start: number, Stop: number, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZREVRANGE-!${Key}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.ToHostString()}/ZREVRANGE-!${Key}${opt.ToParamString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
 
 export const zRank = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZRANK-!${Key}?Member=${Member}`)
+    Req(opt).get(`${opt.ToHostString()}/ZRANK-!${Key}${opt.ToParamString()}?Member=${Member}`)
 
 export const zScore = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZSCORE-!${Key}?Member=${Member}`)
+    Req(opt).get(`${opt.ToHostString()}/ZSCORE-!${Key}${opt.ToParamString()}?Member=${Member}`)
 
 export const zRangeByScore = (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZRANGEBYSCORE-!${Key}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.ToHostString()}/ZRANGEBYSCORE-!${Key}${opt.ToParamString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
 
 export const zRevRangeByScore = (Key: string, Max: number | string, Min: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZREVRANGEBYSCORE-!${Key}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.ToHostString()}/ZREVRANGEBYSCORE-!${Key}${opt.ToParamString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
 
 export const zAdd = (Key: string, Score: number, Member: any, opt: OptionClass = Option) =>
-    Req(opt).post(`${opt.ToHostString()}/ZADD-!${Key}?Score=${Score}`, Member)
+    Req(opt).post(`${opt.ToHostString()}/ZADD-!${Key}${opt.ToParamString()}?Score=${Score}`, Member)
 
 export const zRem = (Key: string, Member: any, opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.ToHostString()}/ZREM-!${Key}?Member=${Member}`)
+    Req(opt).delete(`${opt.ToHostString()}/ZREM-!${Key}${opt.ToParamString()}?Member=${Member}`)
 
 export const zRemRangeByScore = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.ToHostString()}/ZREMRANGEBYSCORE-!${Key}?Min=${Min}&Max=${Max}`)
+    Req(opt).delete(`${opt.ToHostString()}/ZREMRANGEBYSCORE-!${Key}${opt.ToParamString()}?Min=${Min}&Max=${Max}`)
 
 export const zCount = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZCOUNT-!${Key}?Min=${Min}&Max=${Max}`)
+    Req(opt).get(`${opt.ToHostString()}/ZCOUNT-!${Key}${opt.ToParamString()}?Min=${Min}&Max=${Max}`)
 
 export const zCard = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZCARD-!${Key}`)
+    Req(opt).get(`${opt.ToHostString()}/ZCARD-!${Key}${opt.ToParamString()}`)
 
 export const sIsMember = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/SISMEMBER-!${Key}?Member=${Member}`)
+    Req(opt).get(`${opt.ToHostString()}/SISMEMBER-!${Key}${opt.ToParamString()}?Member=${Member}`)
 
 export const API = async (serviceName: string, data: any = {}, opt: OptionClass = Option) => {
     //ensure service name  is standardized
