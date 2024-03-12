@@ -7,28 +7,36 @@ class OptionClass {
     public Header: { [key: string]: string } = {};
 
     public ThrowPromiseError: boolean = false;
-    public Host: string = "";
-    private optionObject = (): OptionClass => (this == Option ? JSON.parse(JSON.stringify(Option)) as OptionClass : this)
-    private WithUrlValue = (key: string, value: string) => {
-        if (!value.startsWith("-!")) value = "-!" + value;
+    public Urlbase: string = "";
+    private optionObject = (): OptionClass => {
+        if (this == Option) return this;
+        var ret = new OptionClass()
+        ret.UrlItems = Object.assign({}, this.UrlItems);
+        ret.Header = Object.assign({}, this.Header);
+        ret.ThrowPromiseError = this.ThrowPromiseError;
+        ret.Urlbase = this.Urlbase;
+        return ret;
+    }
+
+    private withUrlField = (key: string, value: string) => {
         var ret = this.optionObject();
-        ret.UrlItems[key] = value;
+        ret.UrlItems[key] = encodeURIComponent(value);
         return ret;
     }
     //set Content-Type in reponsed header : 
     //json is server default
-    public RspTypeJson = () => this.WithUrlValue("rsb", "-!JSON");
-    public RspTypeJpeg = () => this.WithUrlValue("rsb", "-!JPG");
-    public RspTypeOgg = () => this.WithUrlValue("rsb", "-!OGG");
-    public RspTypeMpeg = () => this.WithUrlValue("rsb", "-!MPEG");
-    public RspTypeMp4 = () => this.WithUrlValue("rsb", "-!MP4");
-    public RspTypeText = () => this.WithUrlValue("rsb", "-!TEXT");
-    public RspTypeStream = () => this.WithUrlValue("rsb", "-!STREAM");
+    public rspTypeJson = () => this.withUrlField("rsb", "rt~JSON");
+    public rspTypeJpeg = () => this.withUrlField("rsb", "rt~JPG");
+    public rspTypeOgg = () => this.withUrlField("rsb", "rt~OGG");
+    public rspTypeMpeg = () => this.withUrlField("rsb", "rt~MPEG");
+    public rspTypeMp4 = () => this.withUrlField("rsb", "rt~MP4");
+    public rspTypeText = () => this.withUrlField("rsb", "rt~TEXT");
+    public rspTypeStream = () => this.withUrlField("rsb", "rt~STREAM");
     //set redis DataSource of the request
-    public WithDataSource = (dataSourceName: string) => this.WithUrlValue("ds", "-!" + encodeURIComponent(dataSourceName));
-    public WithHost = (host: string) => {
+    public withDataSource = (dataSourceName: string) => this.withUrlField("ds", "ds~" + dataSourceName);
+    public withUrlbase = (urlbase: string) => {
         var ret = this.optionObject();
-        ret.Host = host;
+        ret.Urlbase = urlbase;
         return ret;
     }
 
@@ -38,21 +46,17 @@ class OptionClass {
         ret.ThrowPromiseError = allowed;
         return ret;
     }
-    public ToHostString = () => {
-        var host = this.Host ?? defaultHost
-        if (!host.startsWith("http")) throw new Error("host should start with http or https")
-        return host
-    }
 
-    public ToParamString = () => Object.values(this.UrlItems).join("")
+    public paramString = () => Object.values(this.UrlItems).join("-!");
 
     constructor() {
         this.UrlItems = {};
     }
 }
 export const Option = new OptionClass();
-//defaultHost:  set http host of the goflow server
-var defaultHost = ""
+//default urlbase:  set http host of the goflow server
+//the urlbase can be an empty string, which has same domain & port of the web page
+var urlbase = ""
 //primaryErrorHandler: used like to handle 401 error, redirect to login page. i.g.: !e.response && e.response.status === 401&&...
 //  if you want's to further handle the error using Promise, you can set AllowThrowErr to true in Option of each request
 var primaryErrorHandler: Function = () => null;
@@ -61,15 +65,15 @@ var primaryErrorHandler: Function = () => null;
 //JWT: set the JWT in header["Authorization"]
 //PrimaryErrorHandler: used like to handle 401 error, redirect to login page. i.g.: !e.response && e.response.status === 401&&...
 //  if you want's to further handle the error using Promise, you can set AllowThrowErr to true in Option of each request
-export const GlobalConfig = (DefaultHost: string, JWT: string = "", PrimaryErrorHandler: Function = () => null) => {
-    if (!DefaultHost.startsWith("http")) throw new Error("host should start with http or https")
-    else defaultHost = DefaultHost;
+export const configure = (UrlBase: string = "", JWT: string = "", PrimaryErrorHandler: Function = () => null) => {
+    urlbase = UrlBase;
 
     if (!JWT) delete Option.Header["Authorization"];
     else Option.Header["Authorization"] = JWT;
 
     primaryErrorHandler = PrimaryErrorHandler;
 }
+export default configure;
 
 const Req = (option: OptionClass) => {
     let req = axios.create({ headers: option.Header });
@@ -111,81 +115,83 @@ const Req = (option: OptionClass) => {
 
 
 //const Url = "https://jp.voiceofai.cc"
+// all functions should have a commands & key , seperated by "-!"
+// other parameters should be key-value pairs, seperated by "~", and key always 2chars
 export enum urlGetCmd { HEXISTS = "HEXISTS", GET = "GET", HGET = "HGET", HGETALL = "HGETALL", HMGET = "HMGET" }
 export const urlGet = (cmd = urlGetCmd.HGET, Key: string, Field: string = "", opt: OptionClass = Option) => {
-    var url = `${opt.ToHostString()}/${cmd}-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`;
+    var url = `${opt.Urlbase || urlbase}/${cmd}-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`;
     return url
 }
-export const time = (opt: OptionClass = Option.WithDataSource("default")) =>
-    Req(opt).get(`${opt.ToHostString()}/TIME-!null${opt.ToParamString()}?t=${new Date().getTime()}`)
+export const time = (opt: OptionClass = Option.withDataSource("default")) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/TIME-!null-!${opt.paramString()}?t=${new Date().getTime()}`)
 
 export const hExists = (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HEXISTS-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HEXISTS-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
 export const hset = (Key: string, Field: string = "", data: any, opt: OptionClass = Option) =>
-    Req(opt).put(`${opt.ToHostString()}/HSET-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`, data)
+    Req(opt).put(`${opt.Urlbase || urlbase}/HSET-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`, data)
 
 export const get = (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/GET-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/GET-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
 export const hGet = (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HGET-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Field)}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HGET-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
 export const hDel = async (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.ToHostString()}/HDEL-!${Key}${opt.ToParamString()}?F=${Field}`)
+    Req(opt).delete(`${opt.Urlbase || urlbase}/HDEL-!${Key}-!${opt.paramString()}?F=${Field}`)
 
 export const hGetAll = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HGETALL-!${Key}${opt.ToParamString()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HGETALL-!${Key}-!${opt.paramString()}`)
 
 export const hVals = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HVALS-!${Key}${opt.ToParamString()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HVALS-!${Key}-!${opt.paramString()}`)
 
 export const hKeys = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HKEYS-!${Key}${opt.ToParamString()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HKEYS-!${Key}-!${opt.paramString()}`)
 
 export const hRandField = (Key: string, Count: number, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HRANDFIELD-!${Key}${opt.ToParamString()}?Count=${Count}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HRANDFIELD-!${Key}-!${opt.paramString()}?Count=${Count}`)
 
 export const hMGet = (Key: string, Fields: any[] = [], opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/HMGET-!${Key}${opt.ToParamString()}?F=${encodeURIComponent(Fields.join(","))}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HMGET-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Fields.join(","))}`)
 
 export const zRange = (Key: string, Start: number, Stop: number, WITHSCORES: boolean = false, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZRANGE-!${Key}${opt.ToParamString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGE-!${Key}-!${opt.paramString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
 
 export const zRevRange = (Key: string, Start: number, Stop: number, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZREVRANGE-!${Key}${opt.ToParamString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGE-!${Key}-!${opt.paramString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
 
 export const zRank = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZRANK-!${Key}${opt.ToParamString()}?Member=${Member}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANK-!${Key}-!${opt.paramString()}?Member=${Member}`)
 
 export const zScore = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZSCORE-!${Key}${opt.ToParamString()}?Member=${Member}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZSCORE-!${Key}-!${opt.paramString()}?Member=${Member}`)
 
 export const zRangeByScore = (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZRANGEBYSCORE-!${Key}${opt.ToParamString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
 
 export const zRevRangeByScore = (Key: string, Max: number | string, Min: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZREVRANGEBYSCORE-!${Key}${opt.ToParamString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
 
 export const zAdd = (Key: string, Score: number, Member: any, opt: OptionClass = Option) =>
-    Req(opt).post(`${opt.ToHostString()}/ZADD-!${Key}${opt.ToParamString()}?Score=${Score}`, Member)
+    Req(opt).post(`${opt.Urlbase || urlbase}/ZADD-!${Key}-!${opt.paramString()}?Score=${Score}`, Member)
 
 export const zRem = (Key: string, Member: any, opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.ToHostString()}/ZREM-!${Key}${opt.ToParamString()}?Member=${Member}`)
+    Req(opt).delete(`${opt.Urlbase || urlbase}/ZREM-!${Key}-!${opt.paramString()}?Member=${Member}`)
 
 export const zRemRangeByScore = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.ToHostString()}/ZREMRANGEBYSCORE-!${Key}${opt.ToParamString()}?Min=${Min}&Max=${Max}`)
+    Req(opt).delete(`${opt.Urlbase || urlbase}/ZREMRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}`)
 
 export const zCount = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZCOUNT-!${Key}${opt.ToParamString()}?Min=${Min}&Max=${Max}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZCOUNT-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}`)
 
 export const zCard = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/ZCARD-!${Key}${opt.ToParamString()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZCARD-!${Key}-!${opt.paramString()}`)
 
 export const sIsMember = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.ToHostString()}/SISMEMBER-!${Key}${opt.ToParamString()}?Member=${Member}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/SISMEMBER-!${Key}-!${opt.paramString()}?Member=${Member}`)
 
-export const API = async (serviceName: string, data: any = {}, opt: OptionClass = Option) => {
+export const api = async (serviceName: string, data: any = {}, opt: OptionClass = Option) => {
     //ensure service name  is standardized
     //strip prefix "api:" if it exists
     if (serviceName.toLowerCase().startsWith("api:")) {
@@ -201,5 +207,5 @@ export const API = async (serviceName: string, data: any = {}, opt: OptionClass 
         //throw new Error("API service name is empty, which is not allowed")
         throw new Error("API service name is empty, which is not allowed")
     }
-    return Req(opt).post(`${opt.ToHostString()}/API-!${serviceName}${opt.ToParamString()}`, data)
+    return Req(opt).post(`${opt.Urlbase || urlbase}/API-!${serviceName}-!${opt.paramString()}`, data)
 }
