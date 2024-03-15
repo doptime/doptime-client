@@ -1,7 +1,7 @@
 {
-  "name": "goflowclient",
-  "version": "0.3.1",
-  "description": "ts client of GoFlow framework",
+  "name": "doptime-client",
+  "version": "0.3.2",
+  "description": "ts client of doptime framework",
   "main": "/lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -9,20 +9,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yangkequn/goflow-npm.git"
+    "url": "git+https://github.com/doptime/doptime-client.git"
   },
   "keywords": [
-    "goflow",
+    "doptime",
     "framework",
     "microservice",
     "monolithic"
   ],
-  "author": "yangkequn",
+  "author": "kequnyang",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/yangkequn/goflow-npm/issues"
+    "url": "https://github.com/doptime/doptime-client/issues"
   },
-  "homepage": "https://github.com/yangkequn/goflow-npm#readme",
+  "homepage": "https://doptime.com/",
   "dependencies": {
     "@ygoe/msgpack": "^1.0.3",
     "axios": "^1.6.7"
