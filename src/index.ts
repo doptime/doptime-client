@@ -20,20 +20,21 @@ class OptionClass {
 
     private withUrlField = (key: string, value: string) => {
         var ret = this.optionObject();
-        ret.UrlItems[key] = encodeURIComponent(value);
+        ret.UrlItems[key] = encodeURIComponent(key + "~" + value);
         return ret;
     }
     //set Content-Type in reponsed header : 
     //json is server default
-    public rspTypeJson = () => this.withUrlField("rsb", "rt~JSON");
-    public rspTypeJpeg = () => this.withUrlField("rsb", "rt~JPG");
-    public rspTypeOgg = () => this.withUrlField("rsb", "rt~OGG");
-    public rspTypeMpeg = () => this.withUrlField("rsb", "rt~MPEG");
-    public rspTypeMp4 = () => this.withUrlField("rsb", "rt~MP4");
-    public rspTypeText = () => this.withUrlField("rsb", "rt~TEXT");
-    public rspTypeStream = () => this.withUrlField("rsb", "rt~STREAM");
+    public rspTypeJson = () => this.withUrlField("rt", "application/json");
+    public rspTypeJpeg = () => this.withUrlField("rt", "image/jpeg");
+    public rspTypeOgg = () => this.withUrlField("rt", "audio/ogg");
+    public rspTypeMpeg = () => this.withUrlField("rt", "video/mpeg");
+    public rspTypeMp4 = () => this.withUrlField("rt", "video/mp4");
+    public rspTypeText = () => this.withUrlField("rt", "text/plain");
+    public rspTypeStream = () => this.withUrlField("rt", "application/octet-stream");
+    public rspTypeAny = (anyType: string) => this.withUrlField("rt", anyType);
     //set redis DataSource of the request
-    public withDataSource = (dataSourceName: string) => this.withUrlField("ds", "ds~" + dataSourceName);
+    public withDataSource = (dataSourceName: string) => this.withUrlField("ds", dataSourceName);
     public withUrlbase = (urlbase: string) => {
         var ret = this.optionObject();
         ret.Urlbase = urlbase;
