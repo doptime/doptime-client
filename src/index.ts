@@ -20,7 +20,7 @@ class OptionClass {
 
     private withUrlField = (key: string, value: string) => {
         var ret = this.optionObject();
-        ret.UrlItems[key] = encodeURIComponent(key + "~" + value);
+        ret.UrlItems[key] = encodeURIComponent(key) + "~" + encodeURIComponent(value);
         return ret;
     }
     //set Content-Type in reponsed header : 
