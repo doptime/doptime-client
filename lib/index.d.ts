@@ -14,6 +14,7 @@ declare class OptionClass {
     rspTypeMp4: () => OptionClass;
     rspTypeText: () => OptionClass;
     rspTypeStream: () => OptionClass;
+    rspTypeAny: (anyType: string) => OptionClass;
     withDataSource: (dataSourceName: string) => OptionClass;
     withUrlbase: (urlbase: string) => OptionClass;
     ThrowSecondaryPromiseError: (allowed: boolean) => OptionClass;
