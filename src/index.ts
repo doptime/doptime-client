@@ -9,8 +9,8 @@ class OptionClass {
     public ThrowPromiseError: boolean = false;
     public Urlbase: string = "";
     private optionObject = (): OptionClass => {
-        if (this == Option) return this;
-        var ret = new OptionClass()
+        if (this != Option) return this;
+        var ret = new OptionClass(defaultSUToken)
         ret.UrlItems = Object.assign({}, this.UrlItems);
         ret.Header = Object.assign({}, this.Header);
         ret.ThrowPromiseError = this.ThrowPromiseError;
@@ -50,11 +50,13 @@ class OptionClass {
 
     public paramString = () => Object.values(this.UrlItems).join("-!");
 
-    constructor() {
+    constructor(sutoken: string = "") {
         this.UrlItems = {};
+        if (!!sutoken) this.UrlItems["su"] = sutoken;
     }
 }
 export const Option = new OptionClass();
+export const defaultSUToken: string = ""
 //default urlbase:  set http host of the doptime server
 //the urlbase can be an empty string, which has same domain & port of the web page
 var urlbase = ""

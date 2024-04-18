@@ -19,9 +19,10 @@ declare class OptionClass {
     withUrlbase: (urlbase: string) => OptionClass;
     ThrowSecondaryPromiseError: (allowed: boolean) => OptionClass;
     paramString: () => string;
-    constructor();
+    constructor(sutoken?: string);
 }
 export declare const Option: OptionClass;
+export declare const defaultSUToken: string;
 export declare const configure: (UrlBase?: string, JWT?: string, PrimaryErrorHandler?: Function) => void;
 export default configure;
 export declare enum urlGetCmd {
