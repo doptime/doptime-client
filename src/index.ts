@@ -170,9 +170,13 @@ export const zRank = (Key: string, Member: string, opt: OptionClass = Option) =>
 export const zScore = (Key: string, Member: string, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/ZSCORE-!${Key}-!${opt.paramString()}?Member=${Member}`)
 
+//if withscores is true, return [member, score, member, score, ...]
+//if withscores is false, return [member, member, ...]
 export const zRangeByScore = (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
 
+//if withscores is true, return [member, score, member, score, ...]
+//if withscores is false, return [member, member, ...]
 export const zRevRangeByScore = (Key: string, Max: number | string, Min: number | string, WITHSCORES: boolean = true, Offset: Number = 0, Count: Number = 4096, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}&Offset=${Offset}&Count=${Count}`)
 
