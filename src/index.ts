@@ -173,8 +173,8 @@ export const zScore = (Key: string, Member: string, opt: OptionClass = Option) =
 export const zRangeByScore = (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
 
-export const zRevRangeByScore = (Key: string, Max: number | string, Min: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
+export const zRevRangeByScore = (Key: string, Max: number | string, Min: number | string, WITHSCORES: boolean = true, Offset: Number = 0, Count: Number = 4096, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}&Offset=${Offset}&Count=${Count}`)
 
 export const zAdd = (Key: string, Score: number, Member: any, opt: OptionClass = Option) =>
     Req(opt).post(`${opt.Urlbase || urlbase}/ZADD-!${Key}-!${opt.paramString()}?Score=${Score}`, Member)

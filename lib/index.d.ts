@@ -49,7 +49,7 @@ export declare const zRevRange: (Key: string, Start: number, Stop: number, WITHS
 export declare const zRank: (Key: string, Member: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const zScore: (Key: string, Member: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const zRangeByScore: (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
-export declare const zRevRangeByScore: (Key: string, Max: number | string, Min: number | string, WITHSCORES: boolean, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const zRevRangeByScore: (Key: string, Max: number | string, Min: number | string, WITHSCORES?: boolean, Offset?: Number, Count?: Number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const zAdd: (Key: string, Score: number, Member: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const zRem: (Key: string, Member: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const zRemRangeByScore: (Key: string, Min: number, Max: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
