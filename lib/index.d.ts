@@ -56,4 +56,5 @@ export declare const zRemRangeByScore: (Key: string, Min: number, Max: number, o
 export declare const zCount: (Key: string, Min: number, Max: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const zCard: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const sIsMember: (Key: string, Member: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const scan: (Cursor: number, Match: string, Count?: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const api: (serviceName: string, data?: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;

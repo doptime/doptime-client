@@ -194,6 +194,9 @@ export const zCard = (Key: string, opt: OptionClass = Option) =>
 export const sIsMember = (Key: string, Member: string, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/SISMEMBER-!${Key}-!${opt.paramString()}?Member=${Member}`)
 
+export const scan = (Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/SCAN-!null-!${opt.paramString()}?Cursor=${Cursor}&Match=${Match}&Count=${Count}`)
+
 export const api = async (serviceName: string, data: any = {}, opt: OptionClass = Option) => {
     //ensure service name  is standardized
     //strip prefix "api:" if it exists
