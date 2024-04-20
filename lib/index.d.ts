@@ -8,7 +8,7 @@ declare class OptionClass {
     ThrowPromiseError: boolean;
     Urlbase: string;
     private optionObject;
-    private withUrlField;
+    withUrlField: (key: string, value: string) => OptionClass;
     rspTypeJson: () => OptionClass;
     rspTypeJpeg: () => OptionClass;
     rspTypeOgg: () => OptionClass;

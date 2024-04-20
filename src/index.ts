@@ -18,7 +18,7 @@ class OptionClass {
         return ret;
     }
 
-    private withUrlField = (key: string, value: string) => {
+    public withUrlField = (key: string, value: string) => {
         var ret = this.optionObject();
         ret.UrlItems[key] = encodeURIComponent(key) + "~" + encodeURIComponent(value);
         return ret;
@@ -54,7 +54,7 @@ class OptionClass {
 }
 export const Option = new OptionClass();
 export const setDefaultSUToken = (sutoken: string) => {
-    if (!!sutoken) Option.UrlItems["su"] = sutoken;
+    if (!!sutoken) Option.withUrlField("su", sutoken);
     else delete Option.UrlItems["su"];
 }
 //default urlbase:  set http host of the doptime server
