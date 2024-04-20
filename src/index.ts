@@ -48,7 +48,7 @@ class OptionClass {
         return ret;
     }
 
-    public paramString = () => Object.values(this.UrlItems).join("-!");
+    public paramString = () => Object.values(this.UrlItems).map(value => "-!" + value).join("");
 
     constructor() { }
 }
@@ -122,84 +122,84 @@ const Req = (option: OptionClass) => {
 // other parameters should be key-value pairs, seperated by "~", and key always 2chars
 export enum urlGetCmd { HEXISTS = "HEXISTS", GET = "GET", HGET = "HGET", HGETALL = "HGETALL", HMGET = "HMGET" }
 export const urlGet = (cmd = urlGetCmd.HGET, Key: string, Field: string = "", opt: OptionClass = Option) => {
-    var url = `${opt.Urlbase || urlbase}/${cmd}-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`;
+    var url = `${opt.Urlbase || urlbase}/${cmd}-!${Key}${opt.paramString()}?F=${encodeURIComponent(Field)}`;
     return url
 }
 export const time = (opt: OptionClass = Option.withDataSource("default")) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/TIME-!null-!${opt.paramString()}?t=${new Date().getTime()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/TIME-!null${opt.paramString()}?t=${new Date().getTime()}`)
 
 export const hExists = (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/HEXISTS-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HEXISTS-!${Key}${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
 export const hset = (Key: string, Field: string = "", data: any, opt: OptionClass = Option) =>
-    Req(opt).put(`${opt.Urlbase || urlbase}/HSET-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`, data)
+    Req(opt).put(`${opt.Urlbase || urlbase}/HSET-!${Key}${opt.paramString()}?F=${encodeURIComponent(Field)}`, data)
 
 export const get = (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/GET-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/GET-!${Key}${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
 export const hGet = (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/HGET-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Field)}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HGET-!${Key}${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
 export const hDel = async (Key: string, Field: string = "", opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.Urlbase || urlbase}/HDEL-!${Key}-!${opt.paramString()}?F=${Field}`)
+    Req(opt).delete(`${opt.Urlbase || urlbase}/HDEL-!${Key}${opt.paramString()}?F=${Field}`)
 
 export const hGetAll = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/HGETALL-!${Key}-!${opt.paramString()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HGETALL-!${Key}${opt.paramString()}`)
 
 export const hVals = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/HVALS-!${Key}-!${opt.paramString()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HVALS-!${Key}${opt.paramString()}`)
 
 export const hKeys = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/HKEYS-!${Key}-!${opt.paramString()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HKEYS-!${Key}${opt.paramString()}`)
 
 export const hRandField = (Key: string, Count: number, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/HRANDFIELD-!${Key}-!${opt.paramString()}?Count=${Count}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HRANDFIELD-!${Key}${opt.paramString()}?Count=${Count}`)
 
 export const hMGet = (Key: string, Fields: any[] = [], opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/HMGET-!${Key}-!${opt.paramString()}?F=${encodeURIComponent(Fields.join(","))}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/HMGET-!${Key}${opt.paramString()}?F=${encodeURIComponent(Fields.join(","))}`)
 
 export const zRange = (Key: string, Start: number, Stop: number, WITHSCORES: boolean = false, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGE-!${Key}-!${opt.paramString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGE-!${Key}${opt.paramString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
 
 export const zRevRange = (Key: string, Start: number, Stop: number, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGE-!${Key}-!${opt.paramString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGE-!${Key}${opt.paramString()}?Start=${Start}&Stop=${Stop}&WITHSCORES=${WITHSCORES}`)
 
 export const zRank = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANK-!${Key}-!${opt.paramString()}?Member=${Member}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANK-!${Key}${opt.paramString()}?Member=${Member}`)
 
 export const zScore = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZSCORE-!${Key}-!${opt.paramString()}?Member=${Member}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZSCORE-!${Key}${opt.paramString()}?Member=${Member}`)
 
 //if withscores is true, return [member, score, member, score, ...]
 //if withscores is false, return [member, member, ...]
 export const zRangeByScore = (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
 
 //if withscores is true, return [member, score, member, score, ...]
 //if withscores is false, return [member, member, ...]
-export const zRevRangeByScore = (Key: string, Max: number | string, Min: number | string, WITHSCORES: boolean = true, Offset: Number = 0, Count: Number = 4096, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}&Offset=${Offset}&Count=${Count}`)
+export const zRevRangeByScore = (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean = true, Offset: Number = 0, Count: Number = 4096, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}&Offset=${Offset}&Count=${Count}`)
 
 export const zAdd = (Key: string, Score: number, Member: any, opt: OptionClass = Option) =>
-    Req(opt).post(`${opt.Urlbase || urlbase}/ZADD-!${Key}-!${opt.paramString()}?Score=${Score}`, Member)
+    Req(opt).post(`${opt.Urlbase || urlbase}/ZADD-!${Key}${opt.paramString()}?Score=${Score}`, Member)
 
 export const zRem = (Key: string, Member: any, opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.Urlbase || urlbase}/ZREM-!${Key}-!${opt.paramString()}?Member=${Member}`)
+    Req(opt).delete(`${opt.Urlbase || urlbase}/ZREM-!${Key}${opt.paramString()}?Member=${Member}`)
 
 export const zRemRangeByScore = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.Urlbase || urlbase}/ZREMRANGEBYSCORE-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}`)
+    Req(opt).delete(`${opt.Urlbase || urlbase}/ZREMRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${Min}&Max=${Max}`)
 
 export const zCount = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZCOUNT-!${Key}-!${opt.paramString()}?Min=${Min}&Max=${Max}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZCOUNT-!${Key}${opt.paramString()}?Min=${Min}&Max=${Max}`)
 
 export const zCard = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZCARD-!${Key}-!${opt.paramString()}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZCARD-!${Key}${opt.paramString()}`)
 
 export const sIsMember = (Key: string, Member: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/SISMEMBER-!${Key}-!${opt.paramString()}?Member=${Member}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/SISMEMBER-!${Key}${opt.paramString()}?Member=${Member}`)
 
 export const scan = (Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/SCAN-!null-!${opt.paramString()}?Cursor=${Cursor}&Match=${Match}&Count=${Count}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/SCAN-!null${opt.paramString()}?Cursor=${Cursor}&Match=${Match}&Count=${Count}`)
 
 export const api = async (serviceName: string, data: any = {}, opt: OptionClass = Option) => {
     //ensure service name  is standardized
@@ -217,5 +217,5 @@ export const api = async (serviceName: string, data: any = {}, opt: OptionClass 
         //throw new Error("API service name is empty, which is not allowed")
         throw new Error("API service name is empty, which is not allowed")
     }
-    return Req(opt).post(`${opt.Urlbase || urlbase}/API-!${serviceName}-!${opt.paramString()}`, data)
+    return Req(opt).post(`${opt.Urlbase || urlbase}/API-!${serviceName}${opt.paramString()}`, data)
 }
