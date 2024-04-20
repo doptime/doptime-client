@@ -22,7 +22,7 @@ declare class OptionClass {
     constructor(sutoken?: string);
 }
 export declare const Option: OptionClass;
-export declare const defaultSUToken: string;
+export declare const setDefaultSUToken: (sutoken: string) => void;
 export declare const configure: (UrlBase?: string, JWT?: string, PrimaryErrorHandler?: Function) => void;
 export default configure;
 export declare enum urlGetCmd {

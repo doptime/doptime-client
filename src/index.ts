@@ -51,12 +51,14 @@ class OptionClass {
     public paramString = () => Object.values(this.UrlItems).join("-!");
 
     constructor(sutoken: string = "") {
-        this.UrlItems = {};
         if (!!sutoken) this.UrlItems["su"] = sutoken;
     }
 }
 export const Option = new OptionClass();
-export const defaultSUToken: string = ""
+var defaultSUToken: string = ""
+export const setDefaultSUToken = (sutoken: string) => {
+    defaultSUToken = sutoken;
+}
 //default urlbase:  set http host of the doptime server
 //the urlbase can be an empty string, which has same domain & port of the web page
 var urlbase = ""
