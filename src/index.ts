@@ -20,7 +20,7 @@ class OptionClass {
 
     public withUrlField = (key: string, value: string) => {
         var ret = this.optionObject();
-        ret.UrlItems[key] = encodeURIComponent(key) + "~" + encodeURIComponent(value);
+        ret.UrlItems[key] = "-!" + encodeURIComponent(key) + "~" + encodeURIComponent(value);
         return ret;
     }
     //set Content-Type in reponsed header : 
@@ -48,13 +48,13 @@ class OptionClass {
         return ret;
     }
 
-    public paramString = () => Object.values(this.UrlItems).map(value => "-!" + value).join("");
+    public paramString = () => Object.values(this.UrlItems)?.join("");
 
     constructor() { }
 }
 export const Option = new OptionClass();
 export const setDefaultSUToken = (sutoken: string) => {
-    if (!!sutoken) Option.UrlItems["su"] = "su~" + encodeURIComponent(sutoken);
+    if (!!sutoken) Option.UrlItems["su"] = "-!su~" + encodeURIComponent(sutoken);
     else delete Option.UrlItems["su"];
 }
 //default urlbase:  set http host of the doptime server
@@ -173,12 +173,12 @@ export const zScore = (Key: string, Member: string, opt: OptionClass = Option) =
 //if withscores is true, return [member, score, member, score, ...]
 //if withscores is false, return [member, member, ...]
 export const zRangeByScore = (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${encodeURIComponent(Min)}&Max=${encodeURIComponent(Max)}&WITHSCORES=${WITHSCORES}`)
 
 //if withscores is true, return [member, score, member, score, ...]
 //if withscores is false, return [member, member, ...]
 export const zRevRangeByScore = (Key: string, Min: number | string, Max: number | string, WITHSCORES: boolean = true, Offset: Number = 0, Count: Number = 4096, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${Min}&Max=${Max}&WITHSCORES=${WITHSCORES}&Offset=${Offset}&Count=${Count}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZREVRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${encodeURIComponent(Min)}&Max=${encodeURIComponent(Max)}&WITHSCORES=${WITHSCORES}&Offset=${Offset}&Count=${Count}`)
 
 export const zAdd = (Key: string, Score: number, Member: any, opt: OptionClass = Option) =>
     Req(opt).post(`${opt.Urlbase || urlbase}/ZADD-!${Key}${opt.paramString()}?Score=${Score}`, Member)
@@ -187,10 +187,10 @@ export const zRem = (Key: string, Member: any, opt: OptionClass = Option) =>
     Req(opt).delete(`${opt.Urlbase || urlbase}/ZREM-!${Key}${opt.paramString()}?Member=${Member}`)
 
 export const zRemRangeByScore = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
-    Req(opt).delete(`${opt.Urlbase || urlbase}/ZREMRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${Min}&Max=${Max}`)
+    Req(opt).delete(`${opt.Urlbase || urlbase}/ZREMRANGEBYSCORE-!${Key}${opt.paramString()}?Min=${encodeURIComponent(Min)}&Max=${encodeURIComponent(Max)}`)
 
 export const zCount = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZCOUNT-!${Key}${opt.paramString()}?Min=${Min}&Max=${Max}`)
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZCOUNT-!${Key}${opt.paramString()}?Min=${encodeURIComponent(Min)}&Max=${encodeURIComponent(Max)}`)
 
 export const zCard = (Key: string, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/ZCARD-!${Key}${opt.paramString()}`)
