@@ -54,7 +54,7 @@ class OptionClass {
 }
 export const Option = new OptionClass();
 export const setDefaultSUToken = (sutoken: string) => {
-    if (!!sutoken) Option.withUrlField("su", sutoken);
+    if (!!sutoken) Option.UrlItems["su"] = "su~" + encodeURIComponent(sutoken);
     else delete Option.UrlItems["su"];
 }
 //default urlbase:  set http host of the doptime server
