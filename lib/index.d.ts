@@ -1,5 +1,7 @@
 declare class OptionClass {
-    private UrlItems;
+    UrlItems: {
+        [key: string]: string;
+    };
     Header: {
         [key: string]: string;
     };
@@ -19,7 +21,7 @@ declare class OptionClass {
     withUrlbase: (urlbase: string) => OptionClass;
     ThrowSecondaryPromiseError: (allowed: boolean) => OptionClass;
     paramString: () => string;
-    constructor(sutoken?: string);
+    constructor();
 }
 export declare const Option: OptionClass;
 export declare const setDefaultSUToken: (sutoken: string) => void;

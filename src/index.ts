@@ -3,14 +3,14 @@ var msgpack = require('@ygoe/msgpack');
 
 //set multiple feature of the requst, such as response type and redis database name
 class OptionClass {
-    private UrlItems: { [key: string]: string } = {};
+    public UrlItems: { [key: string]: string } = {};
     public Header: { [key: string]: string } = {};
 
     public ThrowPromiseError: boolean = false;
     public Urlbase: string = "";
     private optionObject = (): OptionClass => {
         if (this != Option) return this;
-        var ret = new OptionClass(defaultSUToken)
+        var ret = new OptionClass()
         ret.UrlItems = Object.assign({}, this.UrlItems);
         ret.Header = Object.assign({}, this.Header);
         ret.ThrowPromiseError = this.ThrowPromiseError;
@@ -50,14 +50,12 @@ class OptionClass {
 
     public paramString = () => Object.values(this.UrlItems).join("-!");
 
-    constructor(sutoken: string = "") {
-        if (!!sutoken) this.UrlItems["su"] = sutoken;
-    }
+    constructor() { }
 }
 export const Option = new OptionClass();
-var defaultSUToken: string = ""
 export const setDefaultSUToken = (sutoken: string) => {
-    defaultSUToken = sutoken;
+    if (!!sutoken) Option.UrlItems["su"] = sutoken;
+    else delete Option.UrlItems["su"];
 }
 //default urlbase:  set http host of the doptime server
 //the urlbase can be an empty string, which has same domain & port of the web page
