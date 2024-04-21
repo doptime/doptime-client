@@ -59,4 +59,15 @@ export declare const zCount: (Key: string, Min: number, Max: number, opt?: Optio
 export declare const zCard: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const sIsMember: (Key: string, Member: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const scan: (Cursor: number, Match: string, Count?: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const lRange: (Key: string, Start: number, Stop: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const lLen: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const lIndex: (Key: string, Index: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const lPop: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const lPush: (Key: string, Value: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const lRem: (Key: string, Count: number, Value: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const lSet: (Key: string, Index: number, Value: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const lTrim: (Key: string, Start: number, Stop: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const rPop: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const rPush: (Key: string, Value: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const rPushX: (Key: string, Value: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const api: (serviceName: string, data?: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;

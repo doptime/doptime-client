@@ -201,6 +201,30 @@ export const sIsMember = (Key: string, Member: string, opt: OptionClass = Option
 export const scan = (Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/SCAN-!null${opt.paramString()}?Cursor=${Cursor}&Match=${Match}&Count=${Count}`)
 
+export const lRange = (Key: string, Start: number, Stop: number, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/LRANGE-!${Key}${opt.paramString()}?Start=${Start}&Stop=${Stop}`)
+export const lLen = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/LLEN-!${Key}${opt.paramString()}`)
+export const lIndex = (Key: string, Index: number, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/LINDEX-!${Key}${opt.paramString()}?Index=${Index}`)
+export const lPop = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).delete(`${opt.Urlbase || urlbase}/LPOP-!${Key}${opt.paramString()}`)
+export const lPush = (Key: string, Value: any, opt: OptionClass = Option) =>
+    Req(opt).post(`${opt.Urlbase || urlbase}/LPUSH-!${Key}${opt.paramString()}`, Value)
+export const lRem = (Key: string, Count: number, Value: any, opt: OptionClass = Option) =>
+    Req(opt).delete(`${opt.Urlbase || urlbase}/LREM-!${Key}${opt.paramString()}?Count=${Count}`, Value)
+export const lSet = (Key: string, Index: number, Value: any, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/LSET-!${Key}${opt.paramString()}?Index=${Index}`, Value)
+export const lTrim = (Key: string, Start: number, Stop: number, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/LTRIM-!${Key}${opt.paramString()}?Start=${Start}&Stop=${Stop}`)
+export const rPop = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).delete(`${opt.Urlbase || urlbase}/RPOP-!${Key}${opt.paramString()}`)
+export const rPush = (Key: string, Value: any, opt: OptionClass = Option) =>
+    Req(opt).post(`${opt.Urlbase || urlbase}/RPUSH-!${Key}${opt.paramString()}`, Value)
+export const rPushX = (Key: string, Value: any, opt: OptionClass = Option) =>
+    Req(opt).post(`${opt.Urlbase || urlbase}/RPUSHX-!${Key}${opt.paramString()}`, Value)
+
+
 export const api = async (serviceName: string, data: any = {}, opt: OptionClass = Option) => {
     //ensure service name  is standardized
     //strip prefix "api:" if it exists
