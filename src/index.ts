@@ -223,6 +223,41 @@ export const rPush = (Key: string, Value: any, opt: OptionClass = Option) =>
     Req(opt).post(`${opt.Urlbase || urlbase}/RPUSH-!${Key}${opt.paramString()}`, Value)
 export const rPushX = (Key: string, Value: any, opt: OptionClass = Option) =>
     Req(opt).post(`${opt.Urlbase || urlbase}/RPUSHX-!${Key}${opt.paramString()}`, Value)
+export const type = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/TYPE-!${Key}${opt.paramString()}`)
+export const del = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).delete(`${opt.Urlbase || urlbase}/DEL-!${Key}${opt.paramString()}`)
+export const exists = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/EXISTS-!${Key}${opt.paramString()}`)
+export const expire = (Key: string, Seconds: number, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/EXPIRE-!${Key}${opt.paramString()}?Seconds=${Seconds}`)
+export const expireAt = (Key: string, Timestamp: number, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/EXPIREAT-!${Key}${opt.paramString()}?Timestamp=${Timestamp}`)
+export const persist = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/PERSIST-!${Key}${opt.paramString()}`)
+export const ttl = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/TTL-!${Key}${opt.paramString()}`)
+export const pttl = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/PTTL-!${Key}${opt.paramString()}`)
+export const keys = (Pattern: string, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/KEYS-!null${opt.paramString()}?Pattern=${Pattern}`)
+export const rename = (Key: string, NewKey: string, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/RENAME-!${Key}${opt.paramString()}?NewKey=${NewKey}`)
+export const renamenx = (Key: string, NewKey: string, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/RENAMENX-!${Key}${opt.paramString()}?NewKey=${NewKey}`)
+export const sScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/SSCAN-!${Key}${opt.paramString()}?Cursor=${Cursor}&Match=${Match}&Count=${Count}`)
+export const hScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/HSCAN-!${Key}${opt.paramString()}?Cursor=${Cursor}&Match=${Match}&Count=${Count}`)
+export const zScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/ZSCAN-!${Key}${opt.paramString()}?Cursor=${Cursor}&Match=${Match}&Count=${Count}`)
+export const zIncrBy = (Key: string, Increment: number, Member: any, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/ZINCRBY-!${Key}${opt.paramString()}?Increment=${Increment}`, Member)
+export const hIncrBy = (Key: string, Field: string, Increment: number, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/HINCRBY-!${Key}${opt.paramString()}?Field=${Field}&Increment=${Increment}`)
+export const hIncrByFloat = (Key: string, Field: string, Increment: number, opt: OptionClass = Option) =>
+    Req(opt).put(`${opt.Urlbase || urlbase}/HINCRBYFLOAT-!${Key}${opt.paramString()}?Field=${Field}&Increment=${Increment}`)
+
 
 
 export const api = async (serviceName: string, data: any = {}, opt: OptionClass = Option) => {
