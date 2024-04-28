@@ -257,8 +257,15 @@ export const hIncrBy = (Key: string, Field: string, Increment: number, opt: Opti
     Req(opt).put(`${opt.Urlbase || urlbase}/HINCRBY-!${Key}${opt.paramString()}?Field=${Field}&Increment=${Increment}`)
 export const hIncrByFloat = (Key: string, Field: string, Increment: number, opt: OptionClass = Option) =>
     Req(opt).put(`${opt.Urlbase || urlbase}/HINCRBYFLOAT-!${Key}${opt.paramString()}?Field=${Field}&Increment=${Increment}`)
-
-
+//xrange xadd xlen xdel
+export const xAdd = (Key: string, ID = "", Data: any, opt: OptionClass = Option) =>
+    Req(opt).post(`${opt.Urlbase || urlbase}/XADD-!${Key}${opt.paramString()}?ID=${ID}`, Data)
+export const xLen = (Key: string, opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/XLEN-!${Key}${opt.paramString()}`)
+export const xDel = (Key: string, ID: string, opt: OptionClass = Option) =>
+    Req(opt).delete(`${opt.Urlbase || urlbase}/XDEL-!${Key}${opt.paramString()}?ID=${ID}`)
+export const xRange = (Key: string, Start = "-", Stop = "+", opt: OptionClass = Option) =>
+    Req(opt).get(`${opt.Urlbase || urlbase}/XRANGE-!${Key}${opt.paramString()}?Start=${Start}&Stop=${Stop}`)
 
 export const api = async (serviceName: string, data: any = {}, opt: OptionClass = Option) => {
     //ensure service name  is standardized

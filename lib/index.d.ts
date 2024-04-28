@@ -87,4 +87,8 @@ export declare const zScan: (Key: string, Cursor: number, Match: string, Count?:
 export declare const zIncrBy: (Key: string, Increment: number, Member: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const hIncrBy: (Key: string, Field: string, Increment: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const hIncrByFloat: (Key: string, Field: string, Increment: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const xAdd: (Key: string, ID: string | undefined, Data: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const xLen: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const xDel: (Key: string, ID: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
+export declare const xRange: (Key: string, Start?: string, Stop?: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const api: (serviceName: string, data?: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
