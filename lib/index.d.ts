@@ -16,6 +16,7 @@ declare class OptionClass {
     rspTypeMp4: () => OptionClass;
     rspTypeText: () => OptionClass;
     rspTypeStream: () => OptionClass;
+    rspTypeMsgpack: () => OptionClass;
     rspTypeAny: (anyType: string) => OptionClass;
     withDataSource: (dataSourceName: string) => OptionClass;
     withUrlbase: (urlbase: string) => OptionClass;
@@ -56,10 +57,8 @@ export declare const zAdd: (Key: string, Score: number, Member: any, opt?: Optio
 export declare const zRem: (Key: string, Member: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const zRemRangeByScore: (Key: string, Min: number, Max: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const zCount: (Key: string, Min: number, Max: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
-export declare const zCard: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const sIsMember: (Key: string, Member: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const scan: (Cursor: number, Match: string, Count?: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
-export declare const lLen: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const lIndex: (Key: string, Index: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const lPop: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const lPush: (Key: string, Value: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
@@ -84,7 +83,6 @@ export declare const zIncrBy: (Key: string, Increment: number, Member: any, opt?
 export declare const hIncrBy: (Key: string, Field: string, Increment: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const hIncrByFloat: (Key: string, Field: string, Increment: number, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const xAdd: (Key: string, ID: string | undefined, Data: any, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
-export declare const xLen: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const xDel: (Key: string, ID: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const hLen: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const lLen: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;

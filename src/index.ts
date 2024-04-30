@@ -1,4 +1,3 @@
-import { sCard, xLen } from './index';
 import axios from "axios";
 var msgpack = require('@ygoe/msgpack');
 
@@ -33,6 +32,7 @@ class OptionClass {
     public rspTypeMp4 = () => this.withUrlField("rt", "video/mp4");
     public rspTypeText = () => this.withUrlField("rt", "text/plain");
     public rspTypeStream = () => this.withUrlField("rt", "application/octet-stream");
+    public rspTypeMsgpack = () => this.withUrlField("rt", "application/msgpack");
     public rspTypeAny = (anyType: string) => this.withUrlField("rt", anyType);
     //set redis DataSource of the request
     public withDataSource = (dataSourceName: string) => this.withUrlField("ds", dataSourceName);
@@ -107,6 +107,9 @@ const Req = (option: OptionClass) => {
     req.interceptors.response.use(
         (response: any) => {
             if ("data" in response) return response.data;
+            if (option.UrlItems["rt"] === "application/msgpack") {
+                return msgpack.decode(new Uint8Array(response.data));
+            }
             return response
         },
         (error: any) => {
@@ -193,8 +196,6 @@ export const zRemRangeByScore = (Key: string, Min: number, Max: number, opt: Opt
 export const zCount = (Key: string, Min: number, Max: number, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/ZCOUNT-!${Key}${opt.paramString()}?Min=${encodeURIComponent(Min)}&Max=${encodeURIComponent(Max)}`)
 
-export const zCard = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/ZCARD-!${Key}${opt.paramString()}`)
 
 export const sIsMember = (Key: string, Member: string, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/SISMEMBER-!${Key}${opt.paramString()}?Member=${Member}`)
@@ -202,8 +203,6 @@ export const sIsMember = (Key: string, Member: string, opt: OptionClass = Option
 export const scan = (Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/SCAN-!null${opt.paramString()}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}`)
 
-export const lLen = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/LLEN-!${Key}${opt.paramString()}`)
 export const lIndex = (Key: string, Index: number, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/LINDEX-!${Key}${opt.paramString()}?Index=${Index}`)
 export const lPop = (Key: string, opt: OptionClass = Option) =>
@@ -253,8 +252,6 @@ export const hIncrByFloat = (Key: string, Field: string, Increment: number, opt:
 //xrange xadd xlen xdel
 export const xAdd = (Key: string, ID = "", Data: any, opt: OptionClass = Option) =>
     Req(opt).post(`${opt.Urlbase || urlbase}/XADD-!${Key}${opt.paramString()}?ID=${ID}`, Data)
-export const xLen = (Key: string, opt: OptionClass = Option) =>
-    Req(opt).get(`${opt.Urlbase || urlbase}/XLEN-!${Key}${opt.paramString()}`)
 export const xDel = (Key: string, ID: string, opt: OptionClass = Option) =>
     Req(opt).delete(`${opt.Urlbase || urlbase}/XDEL-!${Key}${opt.paramString()}?ID=${ID}`)
 
@@ -270,19 +267,18 @@ export const zCard = (Key: string, opt: OptionClass = Option) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/ZCARD-!${Key}${opt.paramString()}`)
 
 
-
-export const sScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
+export const sScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option.rspTypeMsgpack()) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/SSCAN-!${Key}${opt.paramString()}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}`)
-export const hScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
+export const hScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option.rspTypeMsgpack()) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/HSCAN-!${Key}${opt.paramString()}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}`)
-export const zScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option) =>
+export const zScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: OptionClass = Option.rspTypeMsgpack()) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/ZSCAN-!${Key}${opt.paramString()}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}`)
-export const lRange = (Key: string, Start: number, Stop: number, opt: OptionClass = Option) =>
+export const lRange = (Key: string, Start: number, Stop: number, opt: OptionClass = Option.rspTypeMsgpack()) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/LRANGE-!${Key}${opt.paramString()}?Start=${Start}&Stop=${Stop}`)
-export const xRange = (Key: string, Start = "-", Stop = "+", opt: OptionClass = Option) =>
+export const xRange = (Key: string, Start = "-", Stop = "+", opt: OptionClass = Option.rspTypeMsgpack()) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/XRANGE-!${Key}${opt.paramString()}?Start=${encodeURIComponent(Start)}&Stop=${encodeURIComponent(Stop)}`)
 //bloack string: 10h20m30s100ms
-export const xRead = (Key: string, Count = 4096, Block = "0ms", opt: OptionClass = Option) =>
+export const xRead = (Key: string, Count = 4096, Block = "0ms", opt: OptionClass = Option.rspTypeMsgpack()) =>
     Req(opt).get(`${opt.Urlbase || urlbase}/XREAD-!${Key}${opt.paramString()}?Count=${Count}&Block=${Block}`)
 
 
