@@ -7,7 +7,7 @@ import stringKey from "./stringKey"
 import listKey from "./listKey"
 import hashKey from "./hashkey"
 import sortedSetKey from "./sortedSetKey"
-import api from "./api"
+import newApi from "./api"
 var msgpack = require('@ygoe/msgpack');
 
 export const msgpackDecode = (data: any) => msgpack.decode(data);
@@ -55,4 +55,4 @@ export default configure;
 export { streamKey, setKey, stringKey, listKey, hashKey, sortedSetKey }
 export { setDefaultSUToken }
 export { Option, OptionClass }
-export { api }
+export { newApi }

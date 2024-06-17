@@ -1,7 +1,7 @@
 import Req from "./http"
 import OptionClass, { Option } from "./Option"
 
-export default function api(serviceName: string, opt: OptionClass = Option) {
+export default function newApi(serviceName: string, option: OptionClass = Option) {
     //ensure service name  is standardized
     //strip prefix "api:" if it exists
     if (serviceName.toLowerCase().startsWith("api:")) {
@@ -17,7 +17,7 @@ export default function api(serviceName: string, opt: OptionClass = Option) {
         //throw new Error("API service name is empty, which is not allowed")
         throw new Error("API service name is empty, which is not allowed")
     }
-    return async function (data: any = {}, opt: OptionClass = Option) {
+    return function (data: any = {}, opt: OptionClass = option): Promise<any> {
         return Req(opt).post(`${opt.Urlbase}/API-!${serviceName}${opt.paramString()}`, data)
     }
 }
