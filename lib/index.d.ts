@@ -5,7 +5,7 @@ import stringKey from "./stringKey";
 import listKey from "./listKey";
 import hashKey from "./hashkey";
 import sortedSetKey from "./sortedSetKey";
-import api from "./api";
+import newApi from "./api";
 export declare const msgpackDecode: (data: any) => any;
 export declare enum urlGetCmd {
     HEXISTS = "HEXISTS",
@@ -32,4 +32,4 @@ export default configure;
 export { streamKey, setKey, stringKey, listKey, hashKey, sortedSetKey };
 export { setDefaultSUToken };
 export { Option, OptionClass };
-export { api };
+export { newApi };
