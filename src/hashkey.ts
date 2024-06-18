@@ -2,14 +2,35 @@ import Req from "./http"
 import OptionClass, { Option } from "./Option"
 
 export default class hashKey {
-    constructor(public key: string) {
+    constructor(public key: string, public shemaToCheck: any = null) {
+        //if shema is not null, for each field in shema, convert it's value to the type 
+        if (typeof shemaToCheck == "object") for (let field in this.shemaToCheck) {
+            let v = this.shemaToCheck[field]
+            this.shemaToCheck[field] = typeof v
+        }
+        else this.shemaToCheck = typeof shemaToCheck
     }
+    private checkShema = (data: any) => {
+        if (this.shemaToCheck == null) return true
+        var typeofdata = typeof data
+        //single value shema
+        if (typeofdata != "object" && typeofdata == this.shemaToCheck) return true
+        //case of object shema
+        for (let field in this.shemaToCheck) {
+            let v = this.shemaToCheck[field]
+            if (typeof data[field] != v) return false
+        }
+        return true
+    }
+
 
     public hExists = (Field: string = "", opt: OptionClass = Option) =>
         Req(opt).get(`${opt.urlbase}/HEXISTS-!${this.key}${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
-    public hset = (Field: string = "", data: any, opt: OptionClass = Option) =>
+    public hset = (Field: string = "", data: any, opt: OptionClass = Option) => {
+        if (!this.checkShema(data)) return Promise.reject("data not match shema")
         Req(opt).put(`${opt.urlbase}/HSET-!${this.key}${opt.paramString()}?F=${encodeURIComponent(Field)}`, data)
+    }
 
     public hGet = (Field: string = "", opt: OptionClass = Option) =>
         Req(opt).get(`${opt.urlbase}/HGET-!${this.key}${opt.paramString()}?F=${encodeURIComponent(Field)}`)
