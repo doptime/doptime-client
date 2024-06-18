@@ -1,33 +1,31 @@
-export default class OptionClass {
-    UrlItems: {
+export default class RequestOptions {
+    urlParams: {
         [key: string]: string;
     };
-    Header: {
+    headers: {
         [key: string]: string;
     };
-    WithHeader: (key: string, value: string) => OptionClass;
+    withHeader: (key: string, value: string) => RequestOptions;
     primaryErrorHandler: Function;
-    Urlbase: string;
-    private optionCopiedFromDefault;
-    withUrlField: (key: string, value: string) => OptionClass;
-    rspTypeJson: () => OptionClass;
-    rspTypeJpeg: () => OptionClass;
-    rspTypeOgg: () => OptionClass;
-    rspTypeMpeg: () => OptionClass;
-    rspTypeMp4: () => OptionClass;
-    rspTypeText: () => OptionClass;
-    rspTypeStream: () => OptionClass;
-    rspTypeMsgpack: () => OptionClass;
-    rspTypeAny: (anyType: string) => OptionClass;
-    withDataSource: (dataSourceName: string) => OptionClass;
-    withUrlbase: (urlbase: string) => OptionClass;
+    private copyOptionsFromDefault;
+    withUrlParam: (key: string, value: string) => RequestOptions;
+    responseTypeJson: () => RequestOptions;
+    responseTypeJpeg: () => RequestOptions;
+    responseTypeOgg: () => RequestOptions;
+    responseTypeMpeg: () => RequestOptions;
+    responseTypeMp4: () => RequestOptions;
+    responseTypeText: () => RequestOptions;
+    responseTypeStream: () => RequestOptions;
+    responseTypeMsgpack: () => RequestOptions;
+    responseTypeCustom: (customType: string) => RequestOptions;
+    withDataSource: (dataSourceName: string) => RequestOptions;
     throwSecondaryPromiseError: boolean;
-    ThrowSecondaryPromiseErrorSetter: (allowed: boolean) => OptionClass;
-    urlbase: string;
-    SetUrlbase: (urlbase: string) => OptionClass;
+    setThrowSecondaryPromiseError: (allowed: boolean) => RequestOptions;
+    baseUrl: string;
+    withUrlbase: (urlbase: string) => RequestOptions;
     paramString: () => string;
     constructor();
 }
-export declare const Option: OptionClass;
+export declare const Option: RequestOptions;
 export declare const configure: (UrlBase?: string, JWT?: string, PrimaryErrorHandler?: Function) => void;
 export declare const setDefaultSUToken: (sutoken: string) => void;

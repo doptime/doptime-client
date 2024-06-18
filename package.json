@@ -1,6 +1,6 @@
 {
   "name": "doptime-client",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "ts client of doptime framework",
   "main": "/lib/index.js",
   "types": "lib/index.d.ts",

@@ -1,8 +1,8 @@
 import { checkSchema, dataObjectToSchema } from "./dataschema"
 import Req from "./http"
-import OptionClass, { Option } from "./Option"
+import RequestOptions, { Option } from "./Option"
 
-export default function newApi(serviceName: string, paramSchemaInstace: any = null, option: OptionClass = Option) {
+export default function newApi(serviceName: string, paramSchemaInstace: any = null, option: RequestOptions = Option) {
     var paramSchema: any = null
     if (!!paramSchemaInstace) paramSchema = dataObjectToSchema(paramSchemaInstace)
     //ensure service name  is standardized
@@ -20,9 +20,9 @@ export default function newApi(serviceName: string, paramSchemaInstace: any = nu
         //throw new Error("API service name is empty, which is not allowed")
         throw new Error("API service name is empty, which is not allowed")
     }
-    return function (data: any = {}, opt: OptionClass = option): Promise<any> {
+    return function (data: any = {}, opt: RequestOptions = option): Promise<any> {
         if (!!paramSchema && !checkSchema(paramSchema, data)) return Promise.reject("param not match shema")
 
-        return Req(opt).post(`${opt.Urlbase}/API-!${serviceName}${opt.paramString()}`, data)
+        return Req(opt).post(`${opt.baseUrl}/API-!${serviceName}${opt.paramString()}`, data)
     }
 }

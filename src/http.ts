@@ -1,12 +1,12 @@
 
 import axios, { Axios, ResponseType } from "axios";
 var msgpack = require('@ygoe/msgpack');
-import OptionClass, { Option } from "./Option"
+import RequestOptions, { Option } from "./Option"
 
 
 
-const Req = (option: OptionClass, responseType: ResponseType = "json") => {
-    let req = axios.create({ headers: option.Header, responseType })
+const Req = (option: RequestOptions, responseType: ResponseType = "json") => {
+    let req = axios.create({ headers: option.headers, responseType })
     req.interceptors.request.use(
         (config: any) => {
             if (config.method === "post" || config.method === "put") {
