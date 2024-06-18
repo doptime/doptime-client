@@ -11,7 +11,7 @@ export default class stringKey {
         Req(opt).get(`${opt.baseUrl}/GET-!${this.key}${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
     public set = (Field: string = "", data: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema && !checkSchema(this.dataSchema, data)) return Promise.reject("data not match shema")
+        if (!!this.dataSchema && !checkSchema(this.dataSchema, data)) return Promise.reject("data not match shema of stringKey:" + this.key)
         Req(opt).put(`${opt.baseUrl}/SET-!${this.key}${opt.paramString()}?F=${encodeURIComponent(Field)}`, data)
     }
 

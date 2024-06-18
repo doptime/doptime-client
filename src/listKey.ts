@@ -12,7 +12,7 @@ export default class listKey {
     public lPop = (opt: RequestOptions = Option) =>
         Req(opt).delete(`${opt.baseUrl}/LPOP-!${this.key}${opt.paramString()}`)
     public lPush = (Value: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema && !checkSchema(this.dataSchema, Value)) return Promise.reject("data not match shema")
+        if (!!this.dataSchema && !checkSchema(this.dataSchema, Value)) return Promise.reject("data not match shema of listKey:" + this.key)
         return Req(opt).post(`${opt.baseUrl} /LPUSH-!${this.key}${opt.paramString()}`, Value)
     }
 
@@ -25,11 +25,11 @@ export default class listKey {
     public rPop = (opt: RequestOptions = Option) =>
         Req(opt).delete(`${opt.baseUrl}/RPOP-!${this.key}${opt.paramString()}`)
     public rPush = (Value: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema && !checkSchema(this.dataSchema, Value)) return Promise.reject("data not match shema")
+        if (!!this.dataSchema && !checkSchema(this.dataSchema, Value)) return Promise.reject("data not match shema of listKey:" + this.key)
         return Req(opt).post(`${opt.baseUrl}/RPUSH-!${this.key}${opt.paramString()}`, Value)
     }
     public rPushX = (Value: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema && !checkSchema(this.dataSchema, Value)) return Promise.reject("data not match shema")
+        if (!!this.dataSchema && !checkSchema(this.dataSchema, Value)) return Promise.reject("data not match shema of listKey:" + this.key)
         return Req(opt).post(`${opt.baseUrl}/RPUSHX-!${this.key}${opt.paramString()}`, Value)
     }
 

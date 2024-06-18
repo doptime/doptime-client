@@ -13,7 +13,7 @@ export default class hashKey {
         Req(opt).get(`${opt.baseUrl}/HEXISTS-!${this.key}${opt.paramString()}?F=${encodeURIComponent(Field)}`)
 
     public hset = (Field: string = "", data: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema && !checkSchema(this.dataSchema, data)) return Promise.reject("data not match shema")
+        if (!!this.dataSchema && !checkSchema(this.dataSchema, data)) return Promise.reject("data not match shema of hashKey:" + this.key)
         Req(opt).put(`${opt.baseUrl}/HSET-!${this.key}${opt.paramString()}?F=${encodeURIComponent(Field)}`, data)
     }
 
