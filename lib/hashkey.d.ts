@@ -1,9 +1,9 @@
 import OptionClass from "./Option";
 export default class hashKey {
     key: string;
-    shemaToCheck: any;
-    constructor(key: string, shemaToCheck?: any);
-    private checkShema;
+    dataSchemaInstace: any;
+    private dataSchema;
+    constructor(key: string, dataSchemaInstace?: any);
     hExists: (Field?: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
     hset: (Field: string | undefined, data: any, opt?: OptionClass) => Promise<never> | undefined;
     hGet: (Field?: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
