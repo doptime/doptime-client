@@ -38,6 +38,25 @@ export default class hashKey {
     public hMGet = (Fields: any[] = [], opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/HMGET-!${this.key}${opt.paramString()}?F=${encodeURIComponent(Fields.join(","))}`)
 
+
+    /**
+     * Sets multiple fields in a hash.
+     * Each value is checked against the schema if it is set.
+     *
+     * @param {Object} data - An object where each key is a field and each value is the value of the field.
+     * @param {RequestOptions} [opt=Option] - Optional request options.
+     * @returns {Promise} - Resolves if the operation is successful, rejects if the data does not match the schema.
+     */
+    public hMSet = (data: any, opt: RequestOptions = Option) => {
+        //data is an object, each key is a field, each value is the value of the field
+        //each value should check schema if schema is set
+        if (!!this.dataSchema) for (var key in data) {
+            if (!checkSchema(this.dataSchema, data[key])) return Promise.reject("data not match shema of hashKey:" + this.key)
+        }
+
+        Req(opt).put(`${opt.baseUrl}/HMSET-!${this.key}${opt.paramString()}`, data)
+    }
+
     public hIncrBy = (Key: string, Field: string, Increment: number, opt: RequestOptions = Option) =>
         Req(opt).put(`${opt.baseUrl}/HINCRBY-!${this.key}${opt.paramString()}?Field=${Field}&Increment=${Increment}`)
     public hIncrByFloat = (Key: string, Field: string, Increment: number, opt: RequestOptions = Option) =>
