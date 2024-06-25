@@ -1,87 +1,81 @@
 
 //set multiple feature of the requst, such as response type and redis database name
 export default class RequestOptions {
-    public urlParams: { [key: string]: string } = {};
-    public headers: { [key: string]: string } = {};
-    public withHeader = (key: string, value: string) => {
-        var ret = this.copyOptionsFromDefault();
-        ret.headers[key] = value;
-        return ret;
-    }
-
-    //primaryErrorHandler: used like to handle 401 error, redirect to login page. i.g.: !e.response && e.response.status === 401&&...
-    //  if you want's to further handle the error using Promise, you can set AllowThrowErr to true in Option of each request
-    public primaryErrorHandler: Function = () => null;
-    private copyOptionsFromDefault = (): RequestOptions => {
-        if (this != Option) return this;
-        var ret = new RequestOptions()
-        ret.urlParams = Object.assign({}, this.urlParams);
-        ret.headers = Object.assign({}, this.headers);
-        ret.primaryErrorHandler = this.primaryErrorHandler;
-        ret.throwSecondaryPromiseError = this.throwSecondaryPromiseError;
-        ret.baseUrl = this.baseUrl;
-        return ret;
-    }
-
-    public withUrlParam = (key: string, value: string) => {
-        var ret = this.copyOptionsFromDefault();
-        ret.urlParams[key] = "-!" + encodeURIComponent(key) + "~" + encodeURIComponent(value);
-        return ret;
-    }
-    // Set Content-Type in response header: 
-    // json is server default
-    public responseTypeJson = () => this.withUrlParam("rt", "application/json");
-    public responseTypeJpeg = () => this.withUrlParam("rt", "image/jpeg");
-    public responseTypeOgg = () => this.withUrlParam("rt", "audio/ogg");
-    public responseTypeMpeg = () => this.withUrlParam("rt", "video/mpeg");
-    public responseTypeMp4 = () => this.withUrlParam("rt", "video/mp4");
-    public responseTypeText = () => this.withUrlParam("rt", "text/plain");
-    public responseTypeStream = () => this.withUrlParam("rt", "application/octet-stream");
-    public responseTypeMsgpack = () => this.withUrlParam("rt", "application/msgpack");
-    public responseTypeCustom = (customType: string) => this.withUrlParam("rt", customType);
-
-    //set redis DataSource of the request
-    public withDataSource = (dataSourceName: string) => this.withUrlParam("ds", dataSourceName);
-
-    public throwSecondaryPromiseError: boolean = false;
-    //default value false, if true, return error
-    public setThrowSecondaryPromiseError = (allowed: boolean) => {
-        var ret = this.copyOptionsFromDefault();
-        ret.throwSecondaryPromiseError = allowed;
-        return ret;
-    }
-
     //default urlbase:  set http host of the doptime server
     //the urlbase can be an empty string, which has same domain & port of the web page
     public baseUrl: string = "";
-    public withUrlbase = (urlbase: string) => {
-        var ret = this.copyOptionsFromDefault();
+    public setUrlbase = (urlbase: string) => {
+        var ret = this.updateOptions();
         ret.baseUrl = urlbase;
         return ret;
     }
 
-    public paramString = () => Object.values(this.urlParams)?.join("");
+    //http params, will be sent as query string
+    public params: { [key: string]: string } = {};
+    public setParam = (name: string, value: string) => this.updateOptions({ params: { [name]: value } });
+
+    //set redis DataSource of the request
+    public setDataSource = (dataSourceName: string) => this.updateOptions({ params: { ds: dataSourceName } });
+
+
+    public responseAs = (type: string): RequestOptions => this.updateOptions({ headers: { rt: type } });
+    public responseAsJson = () => this.responseAs("application/json");
+    public responseAsJpeg = () => this.responseAs("image/jpeg");
+    public responseAsOgg = () => this.responseAs("audio/ogg");
+    public responseAsMpeg = () => this.responseAs("video/mpeg");
+    public responseAsMp4 = () => this.responseAs("video/mp4");
+    public responseAsText = () => this.responseAs("text/plain");
+    public responseAsStream = () => this.responseAs("application/octet-stream");
+    public responseAsMsgpack = () => this.responseAs("application/msgpack");
+
+
+
+    //http headers, will be sent as http headers
+    public headers: { [key: string]: string } = {};
+    public setHeader = (key: string, value: string) => this.updateOptions({ headers: { [key]: value } });
+
+
+    // Set global options
+    public setDefaults = (urlBase: string = "", JWT: string = "", primaryErrorHandler: Function = () => null) => {
+        Option.setDefaultBaseUrl(urlBase);
+        Option.setDefaultJWT(JWT);
+        Option.defaultPrimaryErrorHandler(primaryErrorHandler);
+        return this;
+    }
+
+    public setDefaultSUToken = (sutoken: string) => {
+        delete Option.params["su"];
+        if (sutoken) Option.params["su"] = sutoken;
+        return this;
+    }
+    public setDefaultBaseUrl = (urlBase: string) => this.updateOptions({ baseUrl: urlBase });
+    public setDefaultJWT = (JWT: string) => {
+        if (!JWT) delete Option.headers["Authorization"];
+        else Option.headers["Authorization"] = JWT.startsWith("Bearer ") ? JWT : `Bearer ${JWT}`;
+        return this;
+    }
+
+    // Primary error handler: used to handle 401 errors, redirect to login page, etc.
+    public primaryErrorHandler: Function = () => null;
+    public defaultPrimaryErrorHandler = (primaryErrorHandler: Function) => {
+        Option.primaryErrorHandler = primaryErrorHandler;
+        return this;
+    }
+
+    private updateOptions = (options: { params?: { [key: string]: string }, headers?: { [key: string]: string }, baseUrl?: string, throwSecondaryPromiseError?: boolean } = {}): RequestOptions => {
+        if (this !== Option) return this;
+        const ret = new RequestOptions();
+        ret.params = { ...this.params, ...options.params };
+        ret.headers = { ...this.headers, ...options.headers };
+        ret.baseUrl = options.baseUrl || this.baseUrl;
+        ret.primaryErrorHandler = this.primaryErrorHandler;
+        ret.throwSecondaryPromiseError = options.throwSecondaryPromiseError ?? this.throwSecondaryPromiseError;
+        return ret;
+    }
+
+    public throwSecondaryPromiseError: boolean = false;
+    public allowThrowError = (allowed: boolean) => this.updateOptions({ throwSecondaryPromiseError: allowed });
 
     constructor() { }
 }
 export const Option = new RequestOptions();
-
-//DefaultHost:  set the host of the doptime server
-//JWT: set the JWT in header["Authorization"]
-//PrimaryErrorHandler: used like to handle 401 error, redirect to login page. i.g.: !e.response && e.response.status === 401&&...
-//  if you want's to further handle the error using Promise, you can set AllowThrowErr to true in Option of each request
-export const configure = (UrlBase: string = "", JWT: string = "", PrimaryErrorHandler: Function = () => null) => {
-    Option.baseUrl = UrlBase;
-
-    if (!JWT) delete Option.headers["Authorization"];
-    else {
-        if (JWT.startsWith("Bearer ")) Option.headers["Authorization"] = JWT;
-        else Option.headers["Authorization"] = "Bearer " + JWT;
-    }
-
-    Option.primaryErrorHandler = PrimaryErrorHandler;
-}
-export const setDefaultSUToken = (sutoken: string) => {
-    if (!!sutoken) Option.urlParams["su"] = "-!su~" + encodeURIComponent(sutoken);
-    else delete Option.urlParams["su"];
-}

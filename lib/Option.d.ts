@@ -1,31 +1,33 @@
 export default class RequestOptions {
-    urlParams: {
+    baseUrl: string;
+    setUrlbase: (urlbase: string) => RequestOptions;
+    params: {
         [key: string]: string;
     };
+    setParam: (name: string, value: string) => RequestOptions;
+    setDataSource: (dataSourceName: string) => RequestOptions;
+    responseAs: (type: string) => RequestOptions;
+    responseAsJson: () => RequestOptions;
+    responseAsJpeg: () => RequestOptions;
+    responseAsOgg: () => RequestOptions;
+    responseAsMpeg: () => RequestOptions;
+    responseAsMp4: () => RequestOptions;
+    responseAsText: () => RequestOptions;
+    responseAsStream: () => RequestOptions;
+    responseAsMsgpack: () => RequestOptions;
     headers: {
         [key: string]: string;
     };
-    withHeader: (key: string, value: string) => RequestOptions;
+    setHeader: (key: string, value: string) => RequestOptions;
+    setDefaults: (urlBase?: string, JWT?: string, primaryErrorHandler?: Function) => this;
+    setDefaultSUToken: (sutoken: string) => this;
+    setDefaultBaseUrl: (urlBase: string) => RequestOptions;
+    setDefaultJWT: (JWT: string) => this;
     primaryErrorHandler: Function;
-    private copyOptionsFromDefault;
-    withUrlParam: (key: string, value: string) => RequestOptions;
-    responseTypeJson: () => RequestOptions;
-    responseTypeJpeg: () => RequestOptions;
-    responseTypeOgg: () => RequestOptions;
-    responseTypeMpeg: () => RequestOptions;
-    responseTypeMp4: () => RequestOptions;
-    responseTypeText: () => RequestOptions;
-    responseTypeStream: () => RequestOptions;
-    responseTypeMsgpack: () => RequestOptions;
-    responseTypeCustom: (customType: string) => RequestOptions;
-    withDataSource: (dataSourceName: string) => RequestOptions;
+    defaultPrimaryErrorHandler: (primaryErrorHandler: Function) => this;
+    private updateOptions;
     throwSecondaryPromiseError: boolean;
-    setThrowSecondaryPromiseError: (allowed: boolean) => RequestOptions;
-    baseUrl: string;
-    withUrlbase: (urlbase: string) => RequestOptions;
-    paramString: () => string;
+    allowThrowError: (allowed: boolean) => RequestOptions;
     constructor();
 }
 export declare const Option: RequestOptions;
-export declare const configure: (UrlBase?: string, JWT?: string, PrimaryErrorHandler?: Function) => void;
-export declare const setDefaultSUToken: (sutoken: string) => void;

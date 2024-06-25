@@ -23,6 +23,6 @@ export default function newApi(serviceName: string, paramSchemaInstace: any = nu
     return function (data: any = {}, opt: RequestOptions = option): Promise<any> {
         if (!!paramSchema && !checkSchema(paramSchema, data)) return Promise.reject("param not match shema of api: " + serviceName)
 
-        return Req(opt).post(`${opt.baseUrl}/API-!${serviceName}${opt.paramString()}`, data)
+        return Req(opt).post(`${opt.baseUrl}/API-${serviceName}`, data)
     }
 }
