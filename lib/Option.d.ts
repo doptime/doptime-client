@@ -1,10 +1,15 @@
 export default class RequestOptions {
     baseUrl: string;
-    setUrlbase: (urlbase: string) => RequestOptions;
     params: {
         [key: string]: string;
     };
-    setParam: (name: string, value: string) => RequestOptions;
+    headers: {
+        [key: string]: string;
+    };
+    primaryErrorHandler: Function;
+    throwSecondaryPromiseError: boolean;
+    setUrlbase: (urlbase: string) => RequestOptions;
+    addParam: (name: string, value: string) => RequestOptions;
     setDataSource: (dataSourceName: string) => RequestOptions;
     responseAs: (type: string) => RequestOptions;
     responseAsJson: () => RequestOptions;
@@ -15,18 +20,15 @@ export default class RequestOptions {
     responseAsText: () => RequestOptions;
     responseAsStream: () => RequestOptions;
     responseAsMsgpack: () => RequestOptions;
-    headers: {
-        [key: string]: string;
-    };
     setHeader: (key: string, value: string) => RequestOptions;
-    setDefaults: (urlBase?: string, JWT?: string, primaryErrorHandler?: Function) => this;
-    setDefaultSUToken: (sutoken: string) => this;
-    setDefaultBaseUrl: (urlBase: string) => RequestOptions;
-    setDefaultJWT: (JWT: string) => this;
-    primaryErrorHandler: Function;
-    defaultPrimaryErrorHandler: (primaryErrorHandler: Function) => this;
+    setDefaults: (options?: {
+        urlBase?: string;
+        JWT?: string;
+        primaryErrorHandler?: Function;
+        sutoken?: string;
+        allowThrowError?: boolean;
+    }) => this;
     private updateOptions;
-    throwSecondaryPromiseError: boolean;
     allowThrowError: (allowed: boolean) => RequestOptions;
     constructor();
 }
