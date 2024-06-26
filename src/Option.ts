@@ -42,20 +42,24 @@ export default class RequestOptions {
     // Set global options
     public setDefaults = (options: { urlBase?: string, JWT?: string, primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
         if (options.urlBase !== undefined) {
-            this.updateOptions({ baseUrl: options.urlBase });
+            Option.baseUrl = options.urlBase;
         }
         if (options.JWT !== undefined) {
-            const authorizationHeader = options.JWT.startsWith("Bearer ") ? options.JWT : `Bearer ${options.JWT}`;
-            this.updateOptions({ headers: { Authorization: authorizationHeader } });
+            if (!options.JWT) delete Option.headers["Authorization"];
+            else {
+                const authorizationHeader = options.JWT.startsWith("Bearer ") ? options.JWT : `Bearer ${options.JWT}`;
+                Option.headers["Authorization"] = authorizationHeader;
+            }
         }
         if (options.sutoken !== undefined) {
-            this.updateOptions({ params: { su: options.sutoken } });
+            if (!options.sutoken) delete Option.params["su"];
+            else Option.params["su"] = options.sutoken;
         }
         if (options.primaryErrorHandler !== undefined) {
-            this.primaryErrorHandler = options.primaryErrorHandler;
+            Option.primaryErrorHandler = options.primaryErrorHandler;
         }
         if (options.allowThrowError !== undefined) {
-            this.updateOptions({ throwSecondaryPromiseError: options.allowThrowError });
+            Option.throwSecondaryPromiseError = options.allowThrowError;
         }
         return this;
     }
