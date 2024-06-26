@@ -40,14 +40,14 @@ export default class RequestOptions {
     public setHeader = (key: string, value: string) => this.updateOptions({ headers: { [key]: value } });
 
     // Set global options
-    public setDefaults = (options: { urlBase?: string, JWT?: string, primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
+    public setDefaults = (options: { urlBase?: string, token?: string, primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
         if (options.urlBase !== undefined) {
             Option.baseUrl = options.urlBase;
         }
-        if (options.JWT !== undefined) {
-            if (!options.JWT) delete Option.headers["Authorization"];
+        if (options.token !== undefined) {
+            if (!options.token) delete Option.headers["Authorization"];
             else {
-                const authorizationHeader = options.JWT.startsWith("Bearer ") ? options.JWT : `Bearer ${options.JWT}`;
+                const authorizationHeader = options.token.startsWith("Bearer ") ? options.token : `Bearer ${options.token}`;
                 Option.headers["Authorization"] = authorizationHeader;
             }
         }

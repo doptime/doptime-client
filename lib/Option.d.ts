@@ -23,7 +23,7 @@ export default class RequestOptions {
     setHeader: (key: string, value: string) => RequestOptions;
     setDefaults: (options?: {
         urlBase?: string;
-        JWT?: string;
+        token?: string;
         primaryErrorHandler?: Function;
         sutoken?: string;
         allowThrowError?: boolean;
