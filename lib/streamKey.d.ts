@@ -1,8 +1,10 @@
 import RequestOptions from "./Option";
-import keyClass from "./key";
-export default class streamKey extends keyClass {
+export default class streamKey {
     key: string;
-    constructor(key: string);
+    dataSchemaInstace: any;
+    private dataSchema;
+    constructor(key: string, dataSchemaInstace?: any);
+    ConcatKey(...fields: any[]): streamKey;
     xAdd: (Key: string, ID: string | undefined, Data: any, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     xDel: (Key: string, ID: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     xLen: (Key: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;

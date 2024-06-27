@@ -1,10 +1,10 @@
 import RequestOptions from "./Option";
-import keyClass from "./key";
-export default class hashKey extends keyClass {
+export default class hashKey {
     key: string;
     dataSchemaInstace: any;
     private dataSchema;
     constructor(key: string, dataSchemaInstace?: any);
+    ConcatKey(...fields: any[]): hashKey;
     hExists: (Field?: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     hSet: (Field: string | undefined, data: any, opt?: RequestOptions) => Promise<never> | undefined;
     hGet: (Field?: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;

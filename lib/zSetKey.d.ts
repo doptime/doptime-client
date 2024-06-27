@@ -1,8 +1,10 @@
 import RequestOptions from "./Option";
-import keyClass from "./key";
-export default class zSetKey extends keyClass {
+export default class zSetKey {
     key: string;
-    constructor(key: string);
+    dataSchemaInstace: any;
+    private dataSchema;
+    constructor(key: string, dataSchemaInstace?: any);
+    ConcatKey(...fields: any[]): zSetKey;
     zRange: (Start: number, Stop: number, WITHSCORES?: boolean, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     zRevRange: (Start: number, Stop: number, WITHSCORES: boolean, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     zRank: (Member: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;

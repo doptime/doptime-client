@@ -1,7 +1,1 @@
-export default class keyClass {
-    key: string;
-    private concatedKey;
-    constructor(key: string);
-    cat(subKey: string): void;
-    protected getkey(): string;
-}
+export declare const ConcatKey: (key: string, fields: any[]) => string;

@@ -1,8 +1,10 @@
 import RequestOptions from "./Option";
-import keyClass from "./key";
-export default class setKey extends keyClass {
+export default class setKey {
     key: string;
-    constructor(key: string);
+    dataSchemaInstace: any;
+    private dataSchema;
+    constructor(key: string, dataSchemaInstace?: any);
+    ConcatKey(...fields: any[]): setKey;
     sIsMember: (Key: string, Member: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     sScan: (Key: string, Cursor: number, Match: string, Count?: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     sCard: (Key: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
