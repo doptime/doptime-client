@@ -1,5 +1,6 @@
 import RequestOptions from "./Option";
-export default class zSetKey extends Key {
+import keyClass from "./key";
+export default class zSetKey extends keyClass {
     key: string;
     constructor(key: string);
     zRange: (Start: number, Stop: number, WITHSCORES?: boolean, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;

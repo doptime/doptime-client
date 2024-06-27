@@ -1,4 +1,4 @@
-class Key {
+export default class keyClass {
     private concatedKey: string;
     constructor(public key: string) {
         this.key = key;

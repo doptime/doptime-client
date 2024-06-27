@@ -18,18 +18,36 @@ export const dataObjectToSchema = (schemaToCheck: any): any => {
     return schema;
 };
 
-export const checkSchema = (dataSchemaExpected: any, data: any): boolean => {
-    // If dataSchema is null, the check passes
-    if (dataSchemaExpected == null) return true;
+
+interface SchemaError {
+    field: string;
+    expectedType: string;
+    actualType: string;
+}
+
+export const checkSchema = (dataSchemaExpected: any, data: any, parentField: string = ''): SchemaError[] => {
+    const errors: SchemaError[] = [];
+
+    // If dataSchemaExpected is null, the check passes
+    if (dataSchemaExpected == null) return errors;
 
     // Determine the type of data
     const typeofData = typeof data;
 
     // Check if the schema is a single value type and matches the data type
-    if (typeofData !== "object" && typeofData === dataSchemaExpected) return true;
+    if (typeofData !== "object" && typeofData === dataSchemaExpected) return errors;
 
     // If the data is not an object or is null, it should match the schema type
-    if (typeofData !== "object" || data === null) return typeofData === dataSchemaExpected;
+    if (typeofData !== "object" || data === null) {
+        if (typeofData !== dataSchemaExpected) {
+            errors.push({
+                field: parentField || 'root',
+                expectedType: dataSchemaExpected,
+                actualType: typeofData
+            });
+        }
+        return errors;
+    }
 
     // Check if the schema is an object and the data matches the schema structure
     for (const field in dataSchemaExpected) {
@@ -37,18 +55,22 @@ export const checkSchema = (dataSchemaExpected: any, data: any): boolean => {
             // Recursively check each field in the schema
             const expectedType = dataSchemaExpected[field];
             const actualType = typeof data[field];
+            const currentField = parentField ? `${parentField}.${field}` : field;
 
             // If the expected type is an object, recursively check the nested schema
-            if (typeof expectedType === "object") {
-                if (!checkSchema(expectedType, data[field])) {
-                    return false;
-                }
+            if (typeof expectedType === "object" && expectedType !== null) {
+                errors.push(...checkSchema(expectedType, data[field], currentField));
             } else if (actualType !== expectedType) {
-                return false;
+                errors.push({
+                    field: currentField,
+                    expectedType: expectedType,
+                    actualType: actualType
+                });
             }
         }
     }
 
-    // If all checks pass, return true
-    return true;
+    // If all checks pass, return the errors array (empty if no errors)
+    return errors;
 };
+

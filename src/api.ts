@@ -21,7 +21,12 @@ export default function newApi(serviceName: string, paramSchemaInstace: any = nu
         throw new Error("API service name is empty, which is not allowed")
     }
     return function (data: any = {}, opt: RequestOptions = option): Promise<any> {
-        if (!!paramSchema && !checkSchema(paramSchema, data)) return Promise.reject("param not match shema of api: " + serviceName)
+        if (!!paramSchema) {
+            var errors = checkSchema(paramSchema, data)
+            if (errors.length > 0) {
+                return Promise.reject("shema unmatch of api: " + serviceName + " " + JSON.stringify(errors))
+            }
+        }
 
         return Req(opt).post(`${opt.baseUrl}/API-${serviceName}`, data)
     }

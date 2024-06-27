@@ -1,5 +1,6 @@
 import RequestOptions from "./Option";
-export default class stringKey extends Key {
+import keyClass from "./key";
+export default class stringKey extends keyClass {
     key: string;
     dataSchemaInstace: any;
     private dataSchema;

@@ -1,7 +1,8 @@
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
+import keyClass from "./key"
 
-export default class streamKey extends Key {
+export default class streamKey extends keyClass {
     constructor(public key: string) {
         super(key)
     }

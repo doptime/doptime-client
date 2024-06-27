@@ -1,8 +1,9 @@
 import { checkSchema, dataObjectToSchema } from "./dataschema"
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
+import keyClass from "./key"
 
-export default class hashKey extends Key {
+export default class hashKey extends keyClass {
     private dataSchema: any = null
     constructor(public key: string, public dataSchemaInstace: any = null) {
         super(key)
@@ -15,7 +16,12 @@ export default class hashKey extends Key {
     }
 
     public hSet = (Field: string = "", data: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema && !checkSchema(this.dataSchema, data)) return Promise.reject("data not match shema of hashKey:" + this.key)
+        if (!!this.dataSchema) {
+            var errors = checkSchema(this.dataSchema, data)
+            if (errors.length > 0) {
+                return Promise.reject("shema unmatch of hashkey: " + this.key + " " + JSON.stringify(errors))
+            }
+        }
         Req(opt).put(`${opt.baseUrl}/HSET-${this.getkey()}?f=${encodeURIComponent(Field)}`, data)
     }
 
@@ -53,7 +59,7 @@ export default class hashKey extends Key {
         //data is an object, each key is a field, each value is the value of the field
         //each value should check schema if schema is set
         if (!!this.dataSchema) for (var key in data) {
-            if (!checkSchema(this.dataSchema, data[key])) return Promise.reject("data not match shema of hashKey:" + this.key)
+            if (!checkSchema(this.dataSchema, data[key])) return Promise.reject("shema unmatch of hashkey: " + this.key)
         }
 
         Req(opt).put(`${opt.baseUrl}/HMSET-${this.getkey()}`, data)
