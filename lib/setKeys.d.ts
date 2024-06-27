@@ -1,5 +1,5 @@
 import RequestOptions from "./Option";
-export default class setKey {
+export default class setKey extends Key {
     key: string;
     constructor(key: string);
     sIsMember: (Key: string, Member: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;

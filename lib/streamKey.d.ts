@@ -1,5 +1,5 @@
 import RequestOptions from "./Option";
-export default class streamKey {
+export default class streamKey extends Key {
     key: string;
     constructor(key: string);
     xAdd: (Key: string, ID: string | undefined, Data: any, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;

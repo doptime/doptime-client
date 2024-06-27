@@ -6,7 +6,7 @@ import setKey from "./setKeys"
 import stringKey from "./stringKey"
 import listKey from "./listKey"
 import hashKey from "./hashkey"
-import sortedSetKey from "./sortedSetKey"
+import zSetKey from "./zSetKey"
 import newApi from "./api"
 var msgpack = require('@ygoe/msgpack');
 
@@ -53,6 +53,6 @@ export const renamenx = (Key: string, NewKey: string, opt: OptionClass = Option)
 
 
 export default Option;
-export { streamKey, setKey, stringKey, listKey, hashKey, sortedSetKey }
+export { streamKey, setKey, stringKey, listKey, hashKey, zSetKey as sortedSetKey }
 export { Option, OptionClass }
 export { newApi }

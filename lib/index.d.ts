@@ -4,7 +4,7 @@ import setKey from "./setKeys";
 import stringKey from "./stringKey";
 import listKey from "./listKey";
 import hashKey from "./hashkey";
-import sortedSetKey from "./sortedSetKey";
+import zSetKey from "./zSetKey";
 import newApi from "./api";
 export declare const msgpackDecode: (data: any) => any;
 export declare enum urlGetCmd {
@@ -29,6 +29,6 @@ export declare const pttl: (Key: string, opt?: OptionClass) => Promise<import("a
 export declare const rename: (Key: string, NewKey: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const renamenx: (Key: string, NewKey: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export default Option;
-export { streamKey, setKey, stringKey, listKey, hashKey, sortedSetKey };
+export { streamKey, setKey, stringKey, listKey, hashKey, zSetKey as sortedSetKey };
 export { Option, OptionClass };
 export { newApi };
