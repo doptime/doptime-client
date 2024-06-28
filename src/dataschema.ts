@@ -25,6 +25,7 @@ interface SchemaError {
     actualType: string;
 }
 
+
 export const checkSchema = (dataSchemaExpected: any, data: any, parentField: string = ''): SchemaError[] => {
     const errors: SchemaError[] = [];
 
@@ -54,18 +55,40 @@ export const checkSchema = (dataSchemaExpected: any, data: any, parentField: str
         if (dataSchemaExpected.hasOwnProperty(field)) {
             // Recursively check each field in the schema
             const expectedType = dataSchemaExpected[field];
-            const actualType = typeof data[field];
+            const actualData = data[field];
             const currentField = parentField ? `${parentField}.${field}` : field;
 
             // If the expected type is an object, recursively check the nested schema
             if (typeof expectedType === "object" && expectedType !== null) {
-                errors.push(...checkSchema(expectedType, data[field], currentField));
-            } else if (actualType !== expectedType) {
-                errors.push({
-                    field: currentField,
-                    expectedType: expectedType,
-                    actualType: actualType
-                });
+                errors.push(...checkSchema(expectedType, actualData, currentField));
+            } else {
+                // Check if the actual data is an array and if the expected type is an array
+                if (Array.isArray(expectedType) && Array.isArray(actualData)) {
+                    if (actualData.length === 0) {
+                        // Allow empty arrays to pass the check
+                        continue;
+                    } else {
+                        // Check each element in the array against the expected type
+                        for (const item of actualData) {
+                            const itemType = typeof item;
+                            const expectedItemType = typeof expectedType[0];
+                            if (itemType !== expectedItemType) {
+                                errors.push({
+                                    field: currentField,
+                                    expectedType: `Array of ${expectedItemType}`,
+                                    actualType: `Array of ${itemType}`
+                                });
+                                break; // Stop checking further items if one is invalid
+                            }
+                        }
+                    }
+                } else if (typeof actualData !== expectedType) {
+                    errors.push({
+                        field: currentField,
+                        expectedType: expectedType,
+                        actualType: typeof actualData
+                    });
+                }
             }
         }
     }
@@ -73,4 +96,3 @@ export const checkSchema = (dataSchemaExpected: any, data: any, parentField: str
     // If all checks pass, return the errors array (empty if no errors)
     return errors;
 };
-
