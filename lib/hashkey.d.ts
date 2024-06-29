@@ -2,11 +2,10 @@ import RequestOptions from "./Option";
 export default class hashKey {
     key: string;
     dataSchemaInstace: any;
-    private dataSchema;
     constructor(key: string, dataSchemaInstace?: any);
     ConcatKey(...fields: any[]): hashKey;
     hExists: (Field?: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    hSet: (Field: string | undefined, data: any, opt?: RequestOptions) => Promise<never> | undefined;
+    hSet: (Field: string | undefined, data: any, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     hGet: (Field?: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     hDel: (Field?: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     hGetAll: (opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
@@ -22,7 +21,7 @@ export default class hashKey {
      * @param {RequestOptions} [opt=Option] - Optional request options.
      * @returns {Promise} - Resolves if the operation is successful, rejects if the data does not match the schema.
      */
-    hMSet: (data: any, opt?: RequestOptions) => Promise<never> | undefined;
+    hMSet: (data: any, opt?: RequestOptions) => void;
     hIncrBy: (Key: string, Field: string, Increment: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     hIncrByFloat: (Key: string, Field: string, Increment: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     hScan: (Key: string, Cursor: number, Match: string, Count?: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;

@@ -1,19 +1,13 @@
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
-import { checkSchema, dataObjectToSchema } from "./dataschema"
 
-
-export default class listKey  {
-    private dataSchema: any = null
+export default class listKey {
     constructor(public key: string, public dataSchemaInstace: any = null) {
-        if (!!this.dataSchemaInstace) this.dataSchema = dataObjectToSchema(this.dataSchemaInstace)
     }
 
     public ConcatKey(...fields: any[]): listKey {
         const newKey = [this.key, ...fields].filter((v) => !!v).join(":")
-        const _key = new listKey(newKey);
-        _key.dataSchema = this.dataSchema;
-        return _key;
+        return new listKey(newKey, this.dataSchemaInstace);
     }
 
     public lIndex = (Index: number, opt: RequestOptions = Option) =>
@@ -21,13 +15,6 @@ export default class listKey  {
     public lPop = (opt: RequestOptions = Option) =>
         Req(opt).delete(`${opt.baseUrl}/LPOP-${this.key}`)
     public lPush = (data: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema) {
-            var errors = checkSchema(this.dataSchema, data)
-            if (errors.length > 0) {
-                return Promise.reject("shema unmatch of listkey: " + this.key + " " + JSON.stringify(errors))
-            }
-        }
-
         return Req(opt).post(`${opt.baseUrl}/LPUSH-${this.key}`, data)
     }
 
@@ -40,21 +27,9 @@ export default class listKey  {
     public rPop = (opt: RequestOptions = Option) =>
         Req(opt).delete(`${opt.baseUrl}/RPOP-${this.key}`)
     public rPush = (data: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema) {
-            var errors = checkSchema(this.dataSchema, data)
-            if (errors.length > 0) {
-                return Promise.reject("shema unmatch of listkey: " + this.key + " " + JSON.stringify(errors))
-            }
-        }
         return Req(opt).post(`${opt.baseUrl}/RPUSH-${this.key}`, data)
     }
     public rPushX = (data: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema) {
-            var errors = checkSchema(this.dataSchema, data)
-            if (errors.length > 0) {
-                return Promise.reject("shema unmatch of listkey: " + this.key + " " + JSON.stringify(errors))
-            }
-        }
         return Req(opt).post(`${opt.baseUrl}/RPUSHX-${this.key}`, data)
     }
 

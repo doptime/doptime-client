@@ -1,34 +1,22 @@
-import { checkSchema, dataObjectToSchema } from "./dataschema"
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
 
 
 export default class hashKey {
-    private dataSchema: any = null
     constructor(public key: string, public dataSchemaInstace: any = null) {
-        if (!!this.dataSchemaInstace) this.dataSchema = dataObjectToSchema(this.dataSchemaInstace)
     }
 
     public ConcatKey(...fields: any[]): hashKey {
         const newKey = [this.key, ...fields].filter((v) => !!v).join(":")
-        const _key = new hashKey(newKey);
-        _key.dataSchema = this.dataSchema;
-        return _key;
+        return new hashKey(newKey, this.dataSchemaInstace);
     }
 
-    public hExists = (Field: string = "", opt: RequestOptions = Option) => {
-        return Req(opt).get(`${opt.baseUrl}/HEXISTS-${this.key}?f=${encodeURIComponent(Field)}`)
-    }
+    public hExists = (Field: string = "", opt: RequestOptions = Option) =>
+        Req(opt).get(`${opt.baseUrl}/HEXISTS-${this.key}?f=${encodeURIComponent(Field)}`)
 
-    public hSet = (Field: string = "", data: any, opt: RequestOptions = Option) => {
-        if (!!this.dataSchema) {
-            var errors = checkSchema(this.dataSchema, data)
-            if (errors.length > 0) {
-                return Promise.reject("shema unmatch of hashkey: " + this.key + " " + JSON.stringify(errors))
-            }
-        }
+
+    public hSet = (Field: string = "", data: any, opt: RequestOptions = Option) =>
         Req(opt).put(`${opt.baseUrl}/HSET-${this.key}?f=${encodeURIComponent(Field)}`, data)
-    }
 
     public hGet = (Field: string = "", opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/HGET-${this.key}?f=${encodeURIComponent(Field)}`)
@@ -61,12 +49,6 @@ export default class hashKey {
      * @returns {Promise} - Resolves if the operation is successful, rejects if the data does not match the schema.
      */
     public hMSet = (data: any, opt: RequestOptions = Option) => {
-        //data is an object, each key is a field, each value is the value of the field
-        //each value should check schema if schema is set
-        if (!!this.dataSchema) for (var key in data) {
-            if (!checkSchema(this.dataSchema, data[key])) return Promise.reject("shema unmatch of hashkey: " + this.key)
-        }
-
         Req(opt).put(`${opt.baseUrl}/HMSET-${this.key}`, data)
     }
 
