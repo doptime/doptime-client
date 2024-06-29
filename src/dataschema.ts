@@ -18,35 +18,30 @@ export const dataObjectToSchema = (schemaToCheck: any): any => {
     return schema;
 };
 
-
 interface SchemaError {
     field: string;
     expectedType: string;
+    actualData: string;
     actualType: string;
 }
 
-
-export const checkSchema = (dataSchemaExpected: any, data: any, parentField: string = ''): SchemaError[] => {
+export const checkSchema = (dataSchemaExpected: any, actualData: any, parentField: string = '', parentType: string = ''): SchemaError[] => {
     const errors: SchemaError[] = [];
 
     // If dataSchemaExpected is null, the check passes
     if (dataSchemaExpected == null) return errors;
 
     // Determine the type of data
-    const typeofData = typeof data;
+    const actualType = typeof actualData;
+    if (dataSchemaExpected !== "object") {
+        // Check if the schema is a single value type and matches the data type
+        if (actualType === dataSchemaExpected) return errors;
 
-    // Check if the schema is a single value type and matches the data type
-    if (typeofData !== "object" && typeofData === dataSchemaExpected) return errors;
+        if (parentType == "object" && (actualData == undefined || actualData == null || actualType == undefined)) return errors;
 
-    // If the data is not an object or is null, it should match the schema type
-    if (typeofData !== "object" || data === null) {
-        if (typeofData !== dataSchemaExpected) {
-            errors.push({
-                field: parentField || 'root',
-                expectedType: dataSchemaExpected,
-                actualType: typeofData
-            });
-        }
+        if (actualType !== dataSchemaExpected)
+            errors.push({ field: parentField || 'root', expectedType: dataSchemaExpected, actualData, actualType });
+
         return errors;
     }
 
@@ -55,40 +50,14 @@ export const checkSchema = (dataSchemaExpected: any, data: any, parentField: str
         if (dataSchemaExpected.hasOwnProperty(field)) {
             // Recursively check each field in the schema
             const expectedType = dataSchemaExpected[field];
-            const actualData = data[field];
+            const actualType = typeof actualData[field];
             const currentField = parentField ? `${parentField}.${field}` : field;
 
             // If the expected type is an object, recursively check the nested schema
             if (typeof expectedType === "object" && expectedType !== null) {
-                errors.push(...checkSchema(expectedType, actualData, currentField));
-            } else {
-                // Check if the actual data is an array and if the expected type is an array
-                if (Array.isArray(expectedType) && Array.isArray(actualData)) {
-                    if (actualData.length === 0) {
-                        // Allow empty arrays to pass the check
-                        continue;
-                    } else {
-                        // Check each element in the array against the expected type
-                        for (const item of actualData) {
-                            const itemType = typeof item;
-                            const expectedItemType = typeof expectedType[0];
-                            if (itemType !== expectedItemType) {
-                                errors.push({
-                                    field: currentField,
-                                    expectedType: `Array of ${expectedItemType}`,
-                                    actualType: `Array of ${itemType}`
-                                });
-                                break; // Stop checking further items if one is invalid
-                            }
-                        }
-                    }
-                } else if (typeof actualData !== expectedType) {
-                    errors.push({
-                        field: currentField,
-                        expectedType: expectedType,
-                        actualType: typeof actualData
-                    });
-                }
+                errors.push(...checkSchema(expectedType, actualData[field], currentField, actualType));
+            } else if (actualType !== expectedType) {
+                errors.push({ field: currentField, expectedType: expectedType, actualData, actualType: actualType });
             }
         }
     }
