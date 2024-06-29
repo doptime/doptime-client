@@ -52,13 +52,13 @@ export default class hashKey {
         Req(opt).put(`${opt.baseUrl}/HMSET-${this.key}`, data)
     }
 
-    public hIncrBy = (Key: string, Field: string, Increment: number, opt: RequestOptions = Option) =>
+    public hIncrBy = (Field: string, Increment: number, opt: RequestOptions = Option) =>
         Req(opt).put(`${opt.baseUrl}/HINCRBY-${this.key}?Field=${Field}&Increment=${Increment}`)
-    public hIncrByFloat = (Key: string, Field: string, Increment: number, opt: RequestOptions = Option) =>
+    public hIncrByFloat = (Field: string, Increment: number, opt: RequestOptions = Option) =>
         Req(opt).put(`${opt.baseUrl}/HINCRBYFLOAT-${this.key}?Field=${Field}&Increment=${Increment}`)
-    public hScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: RequestOptions = Option.responseAsMsgpack()) =>
-        Req(opt, "arraybuffer").get(`${opt.baseUrl}/HSCAN-${this.key}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}`)
-    public hLen = (Key: string, opt: RequestOptions = Option) =>
+    public hScan = (Cursor: number, Match: string, Count = 4096, NOVALUES: boolean = false, opt: RequestOptions = Option.responseAsMsgpack()) =>
+        Req(opt, "arraybuffer").get(`${opt.baseUrl}/HSCAN-${this.key}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}&NOVALUES=${NOVALUES}`)
+    public hLen = (opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/HLEN-${this.key}`)
 
 }

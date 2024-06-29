@@ -45,14 +45,14 @@ export default class zSetKey {
     public zCount = (Min: number, Max: number, opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/ZCOUNT-${this.key}?Min=${encodeURIComponent(Min)}&Max=${encodeURIComponent(Max)}`)
 
-    public zCard = (Key: string, opt: RequestOptions = Option) =>
+    public zCard = (opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/ZCARD-${this.key}`)
 
-    public zScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: RequestOptions = Option.responseAsMsgpack()) =>
+    public zScan = (Cursor: number, Match: string, Count = 4096, opt: RequestOptions = Option.responseAsMsgpack()) =>
         Req(opt, "arraybuffer").get(`${opt.baseUrl}/ZSCAN-${this.key}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}`)
 
 
-    public zIncrBy = (Key: string, Increment: number, Member: any, opt: RequestOptions = Option) =>
+    public zIncrBy = (Increment: number, Member: any, opt: RequestOptions = Option) =>
         Req(opt).put(`${opt.baseUrl}/ZINCRBY-${this.key}?Increment=${Increment}`, Member)
 
 }

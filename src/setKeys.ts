@@ -11,12 +11,12 @@ export default class setKey {
         return new setKey(newKey, this.dataSchemaInstace);
     }
 
-    public sIsMember = (Key: string, Member: string, opt: RequestOptions = Option) =>
+    public sIsMember = (Member: string, opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/SISMEMBER-${this.key}?Member=${Member}`)
 
-    public sScan = (Key: string, Cursor: number, Match: string, Count = 4096, opt: RequestOptions = Option.responseAsMsgpack()) =>
+    public sScan = (Cursor: number, Match: string, Count = 4096, opt: RequestOptions = Option.responseAsMsgpack()) =>
         Req(opt, "arraybuffer").get(`${opt.baseUrl}/SSCAN-${this.key}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}`)
-    public sCard = (Key: string, opt: RequestOptions = Option) =>
+    public sCard = (opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/SCARD-${this.key}`)
 
 }

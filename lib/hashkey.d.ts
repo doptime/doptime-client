@@ -22,8 +22,8 @@ export default class hashKey {
      * @returns {Promise} - Resolves if the operation is successful, rejects if the data does not match the schema.
      */
     hMSet: (data: any, opt?: RequestOptions) => void;
-    hIncrBy: (Key: string, Field: string, Increment: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    hIncrByFloat: (Key: string, Field: string, Increment: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    hScan: (Key: string, Cursor: number, Match: string, Count?: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    hLen: (Key: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    hIncrBy: (Field: string, Increment: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    hIncrByFloat: (Field: string, Increment: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    hScan: (Cursor: number, Match: string, Count?: number, NOVALUES?: boolean, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    hLen: (opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
 }

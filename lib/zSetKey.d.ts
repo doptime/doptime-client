@@ -15,7 +15,7 @@ export default class zSetKey {
     zRem: (Member: any, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     zRemRangeByScore: (Min: number, Max: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     zCount: (Min: number, Max: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    zCard: (Key: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    zScan: (Key: string, Cursor: number, Match: string, Count?: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    zIncrBy: (Key: string, Increment: number, Member: any, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    zCard: (opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    zScan: (Cursor: number, Match: string, Count?: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    zIncrBy: (Increment: number, Member: any, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
 }

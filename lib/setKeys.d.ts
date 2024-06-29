@@ -4,7 +4,7 @@ export default class setKey {
     dataSchemaInstace: any;
     constructor(key: string, dataSchemaInstace?: any);
     ConcatKey(...fields: any[]): setKey;
-    sIsMember: (Key: string, Member: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    sScan: (Key: string, Cursor: number, Match: string, Count?: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
-    sCard: (Key: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    sIsMember: (Member: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    sScan: (Cursor: number, Match: string, Count?: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
+    sCard: (opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
 }
