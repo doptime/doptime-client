@@ -57,7 +57,7 @@ export default class hashKey {
     public hIncrByFloat = (Field: string, Increment: number, opt: RequestOptions = Option) =>
         Req(opt).put(`${opt.baseUrl}/HINCRBYFLOAT-${this.key}?Field=${Field}&Increment=${Increment}`)
     public hScan = (Cursor: number, Match: string, Count = 4096, NOVALUES: boolean = false, opt: RequestOptions = Option.responseAsMsgpack()) =>
-        Req(opt, "arraybuffer").get(`${opt.baseUrl}/HSCAN-${this.key}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}&NOVALUES=${NOVALUES}`)
+        Req(opt, "arraybuffer").get(`${opt.baseUrl}/HSCAN-${this.key}?Cursor=${Cursor}&Match=${encodeURIComponent(Match)}&Count=${Count}${NOVALUES ? "&NOVALUES=true" : ""}`)
     public hLen = (opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/HLEN-${this.key}`)
 
