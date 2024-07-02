@@ -1,8 +1,8 @@
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
 
-export default function newApi(serviceName: string, paramSchemaInstace: any = null, option: RequestOptions = Option) {
-    var paramSchema: any = paramSchemaInstace
+export default function newApi(serviceName: string, paramIn: any = null, paramOut: any = null, option: RequestOptions = Option) {
+    var paramSchema: any = paramIn
     //ensure service name  is standardized
     //strip prefix "api:" if it exists
     if (serviceName.toLowerCase().startsWith("api:")) {
@@ -19,7 +19,6 @@ export default function newApi(serviceName: string, paramSchemaInstace: any = nu
         throw new Error("API service name is empty, which is not allowed")
     }
     return function (data: any = {}, opt: RequestOptions = option): Promise<any> {
-
         return Req(opt).post(`${opt.baseUrl}/API-${serviceName}`, data)
     }
 }
