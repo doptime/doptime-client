@@ -1,8 +1,6 @@
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
-
-export default function newApi(serviceName: string, paramIn: any = null, paramOut: any = null, option: RequestOptions = Option) {
-    var paramSchema: any = paramIn
+export default function newApi(serviceName: string, param: { in?: any, out?: any }, option: RequestOptions = Option) {
     //ensure service name  is standardized
     //strip prefix "api:" if it exists
     if (serviceName.toLowerCase().startsWith("api:")) {
