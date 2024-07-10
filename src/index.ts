@@ -53,6 +53,7 @@ export const renamenx = (Key: string, NewKey: string, opt: OptionClass = Option)
 
 
 export default Option;
-export { streamKey, setKey, stringKey, listKey, hashKey, zSetKey as sortedSetKey }
+// export { streamKey, setKey, stringKey, listKey, hashKey, zSetKey }
+export { streamKey as xKey, setKey as setKey, stringKey as strKey, listKey as lKey, hashKey as hKey, zSetKey as zKey }
 export { Option, OptionClass }
 export { newApi }

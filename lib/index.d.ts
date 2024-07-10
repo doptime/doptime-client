@@ -29,6 +29,6 @@ export declare const pttl: (Key: string, opt?: OptionClass) => Promise<import("a
 export declare const rename: (Key: string, NewKey: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const renamenx: (Key: string, NewKey: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export default Option;
-export { streamKey, setKey, stringKey, listKey, hashKey, zSetKey as sortedSetKey };
+export { streamKey as xKey, setKey as setKey, stringKey as strKey, listKey as lKey, hashKey as hKey, zSetKey as zKey };
 export { Option, OptionClass };
 export { newApi };
