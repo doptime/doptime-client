@@ -12,7 +12,14 @@ const Req = (option: RequestOptions, responseType: ResponseType = "json") => {
             if (config.method === "post" || config.method === "put") {
                 //if type of data is Object ,convert to object
                 if (typeof config.data === "object" && !(config.data instanceof Array)) config.data = Object.assign({}, config.data);
-                config.data = msgpack.encode(config.data);
+
+
+                let datatype = typeof config.data
+                //use text format rather than msgpack format if datatype is either bigint, number, string, or boolean
+                if (!(datatype === "bigint" || datatype === "number" || datatype === "string" || datatype === "boolean")) {
+                    config.data = msgpack.encode(config.data);
+                }
+
                 //if config.data is uint8 array ,create new buffer of it's length and copy it to new buffer
                 if (config.data instanceof Uint8Array) {
                     let buf = new ArrayBuffer(config.data.length);
