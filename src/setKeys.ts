@@ -2,13 +2,13 @@ import Req from "./http"
 import RequestOptions, { Option } from "./Option"
 
 
-export default class setKey {
-    constructor(public key: string, public dataSchemaInstace: any = null) {
+export default class setKey<T> {
+    constructor(public key: string, public dataSchemaInstace: T | null = null) {
     }
 
-    public ConcatKey(...fields: any[]): setKey {
+    public ConcatKey(...fields: any[]): setKey<T> {
         const newKey = [this.key, ...fields].filter((v) => !!v).join(":")
-        return new setKey(newKey, this.dataSchemaInstace);
+        return new setKey<T>(newKey, this.dataSchemaInstace);
     }
 
     public sIsMember = (Member: string, opt: RequestOptions = Option) =>

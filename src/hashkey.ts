@@ -2,20 +2,20 @@ import Req from "./http"
 import RequestOptions, { Option } from "./Option"
 
 
-export default class hashKey {
-    constructor(public key: string, public dataSchemaInstace: any = null) {
+export default class hashKey<T> {
+    constructor(public key: string, public dataSchemaInstace: T | null = null) {
     }
 
-    public ConcatKey(...fields: any[]): hashKey {
+    public ConcatKey(...fields: any[]): hashKey<T> {
         const newKey = [this.key, ...fields].filter((v) => !!v).join(":")
-        return new hashKey(newKey, this.dataSchemaInstace);
+        return new hashKey<T>(newKey, this.dataSchemaInstace);
     }
 
     public hExists = (Field: string = "", opt: RequestOptions = Option) =>
         Req(opt).get(`${opt.baseUrl}/HEXISTS-${this.key}?f=${encodeURIComponent(Field)}`)
 
 
-    public hSet = (Field: string = "", data: any, opt: RequestOptions = Option) =>
+    public hSet = (Field: string = "", data: Partial<T>, opt: RequestOptions = Option) =>
         Req(opt).put(`${opt.baseUrl}/HSET-${this.key}?f=${encodeURIComponent(Field)}`, data)
 
     public hGet = (Field: string = "", opt: RequestOptions = Option) =>

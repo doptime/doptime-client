@@ -1,9 +1,9 @@
 import RequestOptions from "./Option";
-export default class stringKey {
+export default class stringKey<T> {
     key: string;
-    dataSchemaInstace: any;
-    constructor(key: string, dataSchemaInstace?: any);
-    ConcatKey(...fields: any[]): stringKey;
+    dataSchemaInstace: T | null;
+    constructor(key: string, dataSchemaInstace?: T | null);
+    ConcatKey(...fields: any[]): stringKey<T>;
     get: (Field?: string, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     set: (Field: string | undefined, data: any, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
 }

@@ -1,14 +1,14 @@
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
 
-export default class zSetKey {
+export default class zSetKey<T> {
     private dataSchema: any = null
-    constructor(public key: string, public dataSchemaInstace: any = null) {
+    constructor(public key: string, public dataSchemaInstace: T | null = null) {
     }
 
-    public ConcatKey(...fields: any[]): zSetKey {
+    public ConcatKey(...fields: any[]): zSetKey<T> {
         const newKey = [this.key, ...fields].filter((v) => !!v).join(":")
-        return new zSetKey(newKey, this.dataSchemaInstace);
+        return new zSetKey<T>(newKey, this.dataSchemaInstace);
     }
 
     public zRange = (Start: number, Stop: number, WITHSCORES: boolean = false, opt: RequestOptions = Option) =>

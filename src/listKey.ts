@@ -1,13 +1,13 @@
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
 
-export default class listKey {
-    constructor(public key: string, public dataSchemaInstace: any = null) {
+export default class listKey<T> {
+    constructor(public key: string, public dataSchemaInstace: T | null = null) {
     }
 
-    public ConcatKey(...fields: any[]): listKey {
+    public ConcatKey(...fields: any[]): listKey<T> {
         const newKey = [this.key, ...fields].filter((v) => !!v).join(":")
-        return new listKey(newKey, this.dataSchemaInstace);
+        return new listKey<T>(newKey, this.dataSchemaInstace);
     }
 
     public lIndex = (Index: number, opt: RequestOptions = Option) =>

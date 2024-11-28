@@ -1,12 +1,12 @@
 import Req from "./http"
 import RequestOptions, { Option } from "./Option"
-export default class streamKey {
-    constructor(public key: string, public dataSchemaInstace: any = null) {
+export default class streamKey<T> {
+    constructor(public key: string, public dataSchemaInstace: T | null = null) {
     }
 
-    public ConcatKey(...fields: any[]): streamKey {
+    public ConcatKey(...fields: any[]): streamKey<T> {
         const newKey = [this.key, ...fields].filter((v) => !!v).join(":")
-        return new streamKey(newKey as string, this.dataSchemaInstace);
+        return new streamKey<T>(newKey as string, this.dataSchemaInstace);
     }
 
     //xrange xadd xlen xdel

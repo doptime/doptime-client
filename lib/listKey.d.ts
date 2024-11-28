@@ -1,9 +1,9 @@
 import RequestOptions from "./Option";
-export default class listKey {
+export default class listKey<T> {
     key: string;
-    dataSchemaInstace: any;
-    constructor(key: string, dataSchemaInstace?: any);
-    ConcatKey(...fields: any[]): listKey;
+    dataSchemaInstace: T | null;
+    constructor(key: string, dataSchemaInstace?: T | null);
+    ConcatKey(...fields: any[]): listKey<T>;
     lIndex: (Index: number, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     lPop: (opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
     lPush: (data: any, opt?: RequestOptions) => Promise<import("axios").AxiosResponse<any, any>>;
