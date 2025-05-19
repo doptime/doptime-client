@@ -1,5 +1,5 @@
 import Req from "./http"
-import RequestOptions, { Option } from "./Option"
+import RequestOptions, { Opt } from "./Option"
 
 
 export default class stringKey<T> {
@@ -11,10 +11,10 @@ export default class stringKey<T> {
         return new stringKey<T>(newKey, this.dataSchemaInstace);
     }
 
-    public get = (Field: string = "", opt: RequestOptions = Option) =>
+    public get = (Field: string = "", opt: RequestOptions = Opt) =>
         Req(opt).get(`${opt.baseUrl}/GET-${this.key}?f=${encodeURIComponent(Field)}`)
 
-    public set = (Field: string = "", data: any, opt: RequestOptions = Option) =>
+    public set = (Field: string = "", data: any, opt: RequestOptions = Opt) =>
         Req(opt).put(`${opt.baseUrl}/SET-${this.key}?f=${encodeURIComponent(Field)}`, data)
 
 }

@@ -41,4 +41,4 @@ zSet.zAdd(1, "member").then(callback);
 zSet.zRange(0, 10).then(callback);
 
 // Global options
-Option.setDefaults({ urlBase: "http://example.com", token: "yourToken" });
+Option.Defaults({ urlBase: "http://example.com", token: "yourToken" });

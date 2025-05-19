@@ -1,7 +1,7 @@
 
 import axios, { Axios, ResponseType } from "axios";
 var msgpack = require('@ygoe/msgpack');
-import RequestOptions, { Option } from "./Option"
+import RequestOptions, { Opt } from "./Option"
 
 
 

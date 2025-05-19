@@ -1,4 +1,4 @@
-import OptionClass, { Option } from "./Option";
+import OptionClass, { Opt, OptDefaults } from "./Option";
 import streamKey from "./streamKey";
 import setKey from "./setKeys";
 import stringKey from "./stringKey";
@@ -28,8 +28,8 @@ export declare const ttl: (Key: string, opt?: OptionClass) => Promise<import("ax
 export declare const pttl: (Key: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const rename: (Key: string, NewKey: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const renamenx: (Key: string, NewKey: string, opt?: OptionClass) => Promise<import("axios").AxiosResponse<any, any>>;
-export default Option;
+export default Opt;
 export { setKey, streamKey, stringKey, listKey, hashKey, zSetKey };
 export { streamKey as xKey, listKey as lKey, hashKey as hKey, zSetKey as zKey };
-export { Option, OptionClass };
+export { Opt, OptDefaults, OptionClass };
 export { newApi };

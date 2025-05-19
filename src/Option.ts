@@ -16,56 +16,33 @@ export default class RequestOptions {
 
     public throwSecondaryPromiseError: boolean = false;
 
-    public setUrlbase = (urlbase: string) => {
+    public WithUrlbase = (urlbase: string) => {
+        
         var ret = this.updateOptions();
         ret.baseUrl = urlbase;
+        ret.baseUrl = ret.baseUrl.replace(/\/+$/, "");
         return ret;
     }
 
-    public addParam = (name: string, value: string) => this.updateOptions({ params: { [name]: value } });
+    public WithParam = (name: string, value: string) => this.updateOptions({ params: { [name]: value } });
 
     //set redis DataSource of the request
-    public setDataSource = (dataSourceName: string) => this.updateOptions({ params: { ds: dataSourceName } });
+    public WithDataSource = (dataSourceName: string) => this.updateOptions({ params: { ds: dataSourceName } });
 
-    public responseAs = (type: string): RequestOptions => this.updateOptions({ headers: { rt: type } });
-    public responseAsJson = () => this.responseAs("application/json");
-    public responseAsJpeg = () => this.responseAs("image/jpeg");
-    public responseAsOgg = () => this.responseAs("audio/ogg");
-    public responseAsMpeg = () => this.responseAs("video/mpeg");
-    public responseAsMp4 = () => this.responseAs("video/mp4");
-    public responseAsText = () => this.responseAs("text/plain");
-    public responseAsStream = () => this.responseAs("application/octet-stream");
-    public responseAsMsgpack = () => this.responseAs("application/msgpack");
+    public WithResponseAs = (type: string): RequestOptions => this.updateOptions({ headers: { rt: type } });
+    public WithResponseAsJson = () => this.WithResponseAs("application/json");
+    public WithResponseAsJpeg = () => this.WithResponseAs("image/jpeg");
+    public WithResponseAsOgg = () => this.WithResponseAs("audio/ogg");
+    public WithResponseAsMpeg = () => this.WithResponseAs("video/mpeg");
+    public WithResponseAsMp4 = () => this.WithResponseAs("video/mp4");
+    public WithResponseAsText = () => this.WithResponseAs("text/plain");
+    public WithResponseAsStream = () => this.WithResponseAs("application/octet-stream");
+    public WithResponseAsMsgpack = () => this.WithResponseAs("application/msgpack");
 
-    public setHeader = (key: string, value: string) => this.updateOptions({ headers: { [key]: value } });
-
-    // Set global options
-    public setDefaults = (options: { urlBase?: string, token?: string, primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
-        if (options.urlBase !== undefined) {
-            Option.baseUrl = options.urlBase;
-        }
-        if (options.token !== undefined) {
-            if (!options.token) delete Option.headers["Authorization"];
-            else {
-                const authorizationHeader = options.token.startsWith("Bearer ") ? options.token : `Bearer ${options.token}`;
-                Option.headers["Authorization"] = authorizationHeader;
-            }
-        }
-        if (options.sutoken !== undefined) {
-            if (!options.sutoken) delete Option.params["su"];
-            else Option.params["su"] = options.sutoken;
-        }
-        if (options.primaryErrorHandler !== undefined) {
-            Option.primaryErrorHandler = options.primaryErrorHandler;
-        }
-        if (options.allowThrowError !== undefined) {
-            Option.throwSecondaryPromiseError = options.allowThrowError;
-        }
-        return this;
-    }
+    public WithHeader = (key: string, value: string) => this.updateOptions({ headers: { [key]: value } });
 
     private updateOptions = (options: { params?: { [key: string]: string }, headers?: { [key: string]: string }, baseUrl?: string, throwSecondaryPromiseError?: boolean } = {}): RequestOptions => {
-        if (this !== Option) return this;
+        if (this !== Opt) return this;
         const ret = new RequestOptions();
         ret.params = { ...this.params, ...options.params };
         ret.headers = { ...this.headers, ...options.headers };
@@ -75,8 +52,34 @@ export default class RequestOptions {
         return ret;
     }
 
-    public allowThrowError = (allowed: boolean) => this.updateOptions({ throwSecondaryPromiseError: allowed });
+    public WithThrowErrorEnabled = (enabled: boolean) => this.updateOptions({ throwSecondaryPromiseError: enabled });
 
     constructor() { }
 }
-export const Option = new RequestOptions();
+export const Opt = new RequestOptions();
+
+// Set global options
+export const OptDefaults = (options: { urlBase?: string, token?: string, primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
+    if (options.urlBase !== undefined) {
+        Opt.baseUrl = options.urlBase;
+        Opt.baseUrl = Opt.baseUrl.replace(/\/+$/, "");
+    }
+    if (options.token !== undefined) {
+        if (!options.token) delete Opt.headers["Authorization"];
+        else {
+            const authorizationHeader = options.token.startsWith("Bearer ") ? options.token : `Bearer ${options.token}`;
+            Opt.headers["Authorization"] = authorizationHeader;
+        }
+    }
+    if (options.sutoken !== undefined) {
+        if (!options.sutoken) delete Opt.params["su"];
+        else Opt.params["su"] = options.sutoken;
+    }
+    if (options.primaryErrorHandler !== undefined) {
+        Opt.primaryErrorHandler = options.primaryErrorHandler;
+    }
+    if (options.allowThrowError !== undefined) {
+        Opt.throwSecondaryPromiseError = options.allowThrowError;
+    }
+    return this;
+}

@@ -1,6 +1,6 @@
 import Req from "./http"
-import RequestOptions, { Option } from "./Option"
-export default function newApi(serviceName: string, param: { in?: any, out?: any }, option: RequestOptions = Option) {
+import RequestOptions, { Opt } from "./Option"
+export default function newApi(serviceName: string, param: { in?: any, out?: any }, option: RequestOptions = Opt) {
     //error if service name is empty
     if (serviceName.length === 0) {
         console.error("API service name is empty, which is not allowed")
