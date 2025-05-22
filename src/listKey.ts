@@ -114,6 +114,6 @@ export default class ListKey<T> {
      * @param opt Optional request options (defaulting to binary/msgpack response handling).
      * @returns Promise resolving to an array of elements in the specified range.
      */
-    public lRange = (start: number, stop: number, opt: RequestOptions = Opt.WithResponseAsMsgpack()): Promise<T[]> =>
-        Req(opt, "arraybuffer").get(`${opt.baseUrl}/LRANGE-${this.key}?Start=${start}&Stop=${stop}`);
+    public lRange = (start: number, stop: number, opt: RequestOptions = Opt): Promise<T[]> =>
+        Req(opt).get(`${opt.baseUrl}/LRANGE-${this.key}?Start=${start}&Stop=${stop}`);
 }
