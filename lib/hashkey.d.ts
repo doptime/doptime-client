@@ -18,9 +18,10 @@ export default class hashKey<T> {
      * (HEXISTS) Checks if a field exists in the hash.
      * @param Field The field name to check.
      * @param opt Optional request options.
-     * @returns Promise resolving to 1 if the field exists, or 0 if the field does not exist or the key does not exist.
+     * @returns Promise resolving to true if the field exists, or false if the field does not exist or the key does not exist.
+
      */
-    hExists: (Field?: string, opt?: RequestOptions) => Promise<0 | 1>;
+    hExists: (Field?: string, opt?: RequestOptions) => Promise<boolean>;
     /**
      * (HSET) Sets the specified field to its respective value in the hash stored at key.
      * If field already exists in the hash, it is overwritten.

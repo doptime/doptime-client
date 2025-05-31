@@ -24,9 +24,10 @@ export default class hashKey<T> {
      * (HEXISTS) Checks if a field exists in the hash.
      * @param Field The field name to check.
      * @param opt Optional request options.
-     * @returns Promise resolving to 1 if the field exists, or 0 if the field does not exist or the key does not exist.
+     * @returns Promise resolving to true if the field exists, or false if the field does not exist or the key does not exist.
+
      */
-    public hExists = (Field: string = "", opt: RequestOptions = Opt): Promise<0 | 1> =>
+    public hExists = (Field: string = "", opt: RequestOptions = Opt): Promise<boolean> =>
         Req(opt).get(`${opt.baseUrl}/HEXISTS-${this.key}?f=${encodeURIComponent(Field)}`);
 
     /**
