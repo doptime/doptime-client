@@ -7,7 +7,7 @@ import stringKey from "./stringKey"
 import listKey from "./listKey"
 import hashKey from "./hashkey"
 import zSetKey from "./zSetKey"
-import newApi from "./api"
+import createApi from "./api"
 var msgpack = require('@ygoe/msgpack');
 
 export const msgpackDecode = (data: any) => msgpack.decode(data);
@@ -57,4 +57,4 @@ export default Opt;
 export { setKey, streamKey, stringKey, listKey, hashKey, zSetKey }
 export { streamKey as xKey, listKey as lKey, hashKey as hKey, zSetKey as zKey }
 export { Opt, OptDefaults, OptionClass }
-export { newApi }
+export { createApi }

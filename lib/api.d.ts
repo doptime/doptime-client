@@ -1,5 +1,2 @@
 import RequestOptions from "./Option";
-export default function newApi(serviceName: string, param: {
-    in?: any;
-    out?: any;
-}, option?: RequestOptions): (data?: any, opt?: RequestOptions) => Promise<any>;
+export default function createApi<TIn, TOut>(serviceName: string, options?: RequestOptions): (data?: TIn, opt?: RequestOptions) => Promise<TOut>;

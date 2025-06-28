@@ -1,9 +1,9 @@
 
 // Import doptime-client
-import { Option, newApi, hashKey, listKey, setKey, streamKey, stringKey, zSetKey } from "doptime-client";
+import { Option, createApi, hashKey, listKey, setKey, streamKey, stringKey, zSetKey } from "doptime-client";
 
 // Initialize API with service name
-const api = newApi("serviceName", { in: { "param": "value" }, out: { "param": "value" } });
+const api = createApi("serviceName", { in: { "param": "value" }, out: { "param": "value" } });
 // Example API call
 api({ inputData: "value" }).then(callback);
 
