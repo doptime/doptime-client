@@ -64,13 +64,6 @@ export const configure = (options: { urlBase?: string, token?: string | (() => s
         Opt.baseUrl = options.urlBase;
         Opt.baseUrl = Opt.baseUrl.replace(/\/+$/, "");
     }
-    if (options.token !== undefined) {
-        if (!options.token) delete Opt.headers["Authorization"];
-        else {
-            const authorizationHeader = options.token.startsWith("Bearer ") ? options.token : `Bearer ${options.token}`;
-            Opt.headers["Authorization"] = authorizationHeader;
-        }
-    }
 
     if (options.token !== undefined) {
         const setAuth = (val: string) => {
