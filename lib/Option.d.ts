@@ -28,7 +28,7 @@ export default class RequestOptions {
 export declare const Opt: RequestOptions;
 export declare const configure: (options?: {
     urlBase?: string;
-    token?: string | (() => string) | (() => Promise<string>);
+    token?: string | null | (() => string | null) | (() => Promise<string | null>);
     primaryErrorHandler?: Function;
     sutoken?: string;
     allowThrowError?: boolean;

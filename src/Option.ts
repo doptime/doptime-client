@@ -59,14 +59,14 @@ export default class RequestOptions {
 export const Opt = new RequestOptions();
 
 // Set global options
-export const configure = (options: { urlBase?: string, token?: string | (() => string) | (() => Promise<string>), primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
+export const configure = (options: { urlBase?: string, token?: string | null | (() => string | null) | (() => Promise<string | null>), primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
     if (options.urlBase !== undefined) {
         Opt.baseUrl = options.urlBase;
         Opt.baseUrl = Opt.baseUrl.replace(/\/+$/, "");
     }
 
     if (options.token !== undefined) {
-        const setAuth = (val: string) => {
+        const setAuth = (val: string | null) => {
             if (!val) delete Opt.headers["Authorization"];
             else Opt.headers["Authorization"] = val.startsWith("Bearer ") ? val : `Bearer ${val}`;
         };
