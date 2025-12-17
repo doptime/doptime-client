@@ -1,4 +1,4 @@
-import OptionClass, { Opt, OptDefaults } from "./Option";
+import OptionClass, { Opt, configure } from "./Option";
 import streamKey from "./streamKey";
 import setKey from "./setKeys";
 import stringKey from "./stringKey";
@@ -31,5 +31,5 @@ export declare const renamenx: (Key: string, NewKey: string, opt?: OptionClass) 
 export default Opt;
 export { setKey, streamKey, stringKey, listKey, hashKey, zSetKey };
 export { streamKey as xKey, listKey as lKey, hashKey as hKey, zSetKey as zKey };
-export { Opt, OptDefaults, OptionClass };
+export { Opt, configure, OptionClass };
 export { createApi };

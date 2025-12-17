@@ -26,7 +26,7 @@ export default class RequestOptions {
     constructor();
 }
 export declare const Opt: RequestOptions;
-export declare const OptDefaults: (options?: {
+export declare const configure: (options?: {
     urlBase?: string;
     token?: string;
     primaryErrorHandler?: Function;

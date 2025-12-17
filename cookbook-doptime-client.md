@@ -21,9 +21,9 @@ npm install doptime-client
 **Source:** `Option.ts`, `index.ts`
 
 ```typescript
-import { OptDefaults } from "doptime-client";
+import { configure } from "doptime-client";
 
-OptDefaults({
+configure({
     urlBase: "https://api.myapp.com", // Backend URL
     token: "jwt_token",               // Auto-adds 'Bearer '
     primaryErrorHandler: (err) => {   // Handle 401/403

@@ -17,7 +17,7 @@ export default class RequestOptions {
     public throwSecondaryPromiseError: boolean = false;
 
     public WithUrlbase = (urlbase: string) => {
-        
+
         var ret = this.updateOptions();
         ret.baseUrl = urlbase;
         ret.baseUrl = ret.baseUrl.replace(/\/+$/, "");
@@ -59,7 +59,7 @@ export default class RequestOptions {
 export const Opt = new RequestOptions();
 
 // Set global options
-export const OptDefaults = (options: { urlBase?: string, token?: string, primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
+export const configure = (options: { urlBase?: string, token?: string | (() => string) | (() => Promise<string>), primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
     if (options.urlBase !== undefined) {
         Opt.baseUrl = options.urlBase;
         Opt.baseUrl = Opt.baseUrl.replace(/\/+$/, "");
@@ -71,6 +71,31 @@ export const OptDefaults = (options: { urlBase?: string, token?: string, primary
             Opt.headers["Authorization"] = authorizationHeader;
         }
     }
+
+    if (options.token !== undefined) {
+        const setAuth = (val: string) => {
+            if (!val) delete Opt.headers["Authorization"];
+            else Opt.headers["Authorization"] = val.startsWith("Bearer ") ? val : `Bearer ${val}`;
+        };
+
+        if (!options.token) {
+            delete Opt.headers["Authorization"];
+        } else if (typeof options.token === 'function') {
+            try {
+                const result = options.token();
+                if (result instanceof Promise) {
+                    result.then(setAuth).catch(err => console.warn("[doptime] Async token failed:", err));
+                } else {
+                    setAuth(result);
+                }
+            } catch (err) {
+                console.warn("[doptime] Token function failed:", err);
+            }
+        } else {
+            setAuth(options.token);
+        }
+    }
+
     if (options.sutoken !== undefined) {
         if (!options.sutoken) delete Opt.params["su"];
         else Opt.params["su"] = options.sutoken;

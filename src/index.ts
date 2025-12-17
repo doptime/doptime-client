@@ -1,5 +1,5 @@
 import axios, { Axios, ResponseType } from "axios";
-import OptionClass, { Opt, OptDefaults } from "./Option"
+import OptionClass, { Opt, configure } from "./Option"
 import Req from "./http"
 import streamKey from "./streamKey"
 import setKey from "./setKeys"
@@ -56,5 +56,5 @@ export default Opt;
 // export { streamKey, setKey, stringKey, listKey, hashKey, zSetKey }
 export { setKey, streamKey, stringKey, listKey, hashKey, zSetKey }
 export { streamKey as xKey, listKey as lKey, hashKey as hKey, zSetKey as zKey }
-export { Opt, OptDefaults, OptionClass }
+export { Opt, configure, OptionClass }
 export { createApi }
