@@ -1,4 +1,4 @@
-import RequestOptions from "./Option";
+import RequestOptions from "./config";
 export default class setKey<T> {
     key: string;
     dataSchemaInstace: T | null;

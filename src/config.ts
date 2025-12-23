@@ -1,4 +1,3 @@
-
 //set multiple feature of the requst, such as response type and redis database name
 export default class RequestOptions {
     //default urlbase:  set http host of the doptime server
@@ -15,6 +14,9 @@ export default class RequestOptions {
     public primaryErrorHandler: Function = () => null;
 
     public throwSecondaryPromiseError: boolean = false;
+
+    // [New] Dynamic token getter
+    public getToken: () => Promise<string | null> | string | null = () => null;
 
     public WithUrlbase = (urlbase: string) => {
 
@@ -41,7 +43,8 @@ export default class RequestOptions {
 
     public WithHeader = (key: string, value: string) => this.updateOptions({ headers: { [key]: value } });
 
-    private updateOptions = (options: { params?: { [key: string]: string }, headers?: { [key: string]: string }, baseUrl?: string, throwSecondaryPromiseError?: boolean } = {}): RequestOptions => {
+    // [Modified] Added getToken to updateOptions
+    private updateOptions = (options: { params?: { [key: string]: string }, headers?: { [key: string]: string }, baseUrl?: string, throwSecondaryPromiseError?: boolean, getToken?: () => Promise<string | null> | string | null } = {}): RequestOptions => {
         if (this !== Opt) return this;
         const ret = new RequestOptions();
         ret.params = { ...this.params, ...options.params };
@@ -49,6 +52,7 @@ export default class RequestOptions {
         ret.baseUrl = options.baseUrl || this.baseUrl;
         ret.primaryErrorHandler = this.primaryErrorHandler;
         ret.throwSecondaryPromiseError = options.throwSecondaryPromiseError ?? this.throwSecondaryPromiseError;
+        ret.getToken = options.getToken || this.getToken;
         return ret;
     }
 
@@ -59,33 +63,30 @@ export default class RequestOptions {
 export const Opt = new RequestOptions();
 
 // Set global options
-export const configure = (options: { urlBase?: string, token?: string | null | (() => string | null) | (() => Promise<string | null>), primaryErrorHandler?: Function, sutoken?: string, allowThrowError?: boolean } = {}) => {
+// [Modified] Added getToken parameter and unified token logic
+export const configure = (options: { 
+    urlBase?: string, 
+    token?: string | null, // Keep for backward compatibility (static string)
+    getToken?: () => Promise<string | null> | string | null, // New dynamic getter
+    primaryErrorHandler?: Function, 
+    sutoken?: string, 
+    allowThrowError?: boolean 
+} = {}) => {
     if (options.urlBase !== undefined) {
         Opt.baseUrl = options.urlBase;
         Opt.baseUrl = Opt.baseUrl.replace(/\/+$/, "");
     }
 
-    if (options.token !== undefined) {
-        const setAuth = (val: string | null) => {
-            if (!val) delete Opt.headers["Authorization"];
-            else Opt.headers["Authorization"] = val.startsWith("Bearer ") ? val : `Bearer ${val}`;
-        };
-
-        if (!options.token) {
-            delete Opt.headers["Authorization"];
-        } else if (typeof options.token === 'function') {
-            try {
-                const result = options.token();
-                if (result instanceof Promise) {
-                    result.then(setAuth).catch(err => console.warn("[doptime] Async token failed:", err));
-                } else {
-                    setAuth(result);
-                }
-            } catch (err) {
-                console.warn("[doptime] Token function failed:", err);
-            }
+    // Logic change: Unify both 'token' and 'getToken' into Opt.getToken
+    if (options.getToken !== undefined) {
+        // Priority 1: Dynamic function
+        Opt.getToken = options.getToken;
+    } else if (options.token !== undefined) {
+        // Priority 2: Static string (wrapped as function)
+        if (options.token) {
+            Opt.getToken = () => options.token!;
         } else {
-            setAuth(options.token);
+            Opt.getToken = () => null;
         }
     }
 

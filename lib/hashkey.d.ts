@@ -1,4 +1,4 @@
-import RequestOptions from "./Option";
+import RequestOptions from "./config";
 export default class hashKey<T> {
     key: string;
     dataSchemaInstance: T | null;

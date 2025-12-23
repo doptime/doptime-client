@@ -1,14 +1,29 @@
-
 import axios, { Axios, ResponseType } from "axios";
 var msgpack = require('@ygoe/msgpack');
 import RequestOptions, { Opt } from "./config"
 
-
-
 const Req = (option: RequestOptions, responseType: ResponseType = "json") => {
     let req = axios.create({ headers: option.headers, responseType })
+    
+    // [Modified] Changed to async interceptor to await getToken()
     req.interceptors.request.use(
-        (config: any) => {
+        async (config: any) => {
+
+            // --- New Logic Start: Dynamic Token Injection ---
+            try {
+                const latestToken = await option.getToken();
+                if (latestToken) {
+                    const authValue = latestToken.startsWith("Bearer ") ? latestToken : `Bearer ${latestToken}`;
+                    config.headers["Authorization"] = authValue;
+                } else {
+                    // Optional: remove header if no token returned (clean state)
+                    // delete config.headers["Authorization"]; 
+                }
+            } catch (e) {
+                console.warn("[doptime] Get token failed:", e);
+            }
+            // --- New Logic End ---
+
             if (config.method === "post" || config.method === "put") {
                 //if type of data is Object ,convert to object
                 if (typeof config.data === "object" && !(config.data instanceof Array)) config.data = Object.assign({}, config.data);

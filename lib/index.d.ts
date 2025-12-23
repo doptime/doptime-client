@@ -1,4 +1,4 @@
-import OptionClass, { Opt, configure } from "./Option";
+import OptionClass, { Opt, configure } from "./config";
 import streamKey from "./streamKey";
 import setKey from "./setKeys";
 import stringKey from "./stringKey";

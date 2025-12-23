@@ -1,4 +1,4 @@
-import RequestOptions from "./Option";
+import RequestOptions from "./config";
 /**
  * @template T
  */
