@@ -1,5 +1,5 @@
 import Req from "./http"
-import RequestOptions, { Opt } from "./Option"
+import RequestOptions, { Opt } from "./config"
 
 export default class zSetKey<T> {
     private dataSchema: any = null

@@ -1,5 +1,5 @@
 import Req from "./http"; // Assuming Req is a function that handles HTTP requests and returns Promises
-import RequestOptions, { Opt } from "./Option"; // Assuming RequestOptions and a default Opt instance
+import RequestOptions, { Opt } from "./config"; // Assuming RequestOptions and a default Opt instance
 
 export default class hashKey<T> {
     /**

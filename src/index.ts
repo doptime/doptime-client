@@ -1,5 +1,5 @@
 import axios, { Axios, ResponseType } from "axios";
-import OptionClass, { Opt, configure } from "./Option"
+import OptionClass, { Opt, configure } from "./config"
 import Req from "./http"
 import streamKey from "./streamKey"
 import setKey from "./setKeys"

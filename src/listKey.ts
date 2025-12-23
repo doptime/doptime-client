@@ -1,5 +1,5 @@
 import Req from "./http";
-import RequestOptions, { Opt } from "./Option";
+import RequestOptions, { Opt } from "./config";
 
 /**
  * @template T

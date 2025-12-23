@@ -1,7 +1,7 @@
 
 
 import Req from "./http";
-import RequestOptions, { Opt } from "./Option";
+import RequestOptions, { Opt } from "./config";
 
 export default function createApi<TIn = any, TOut = any>(serviceName: string, options: RequestOptions = Opt) {
     if (!serviceName) {

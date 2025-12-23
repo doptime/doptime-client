@@ -1,5 +1,5 @@
 import Req from "./http"
-import RequestOptions, { Opt } from "./Option"
+import RequestOptions, { Opt } from "./config"
 export default class streamKey<T> {
     constructor(public key: string, public dataSchemaInstace: T | null = null) {
     }
