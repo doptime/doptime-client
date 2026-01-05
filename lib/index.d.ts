@@ -7,6 +7,7 @@ import hashKey from "./hashkey";
 import zSetKey from "./zSetKey";
 import createApi from "./api";
 export declare const msgpackDecode: (data: any) => any;
+export declare const msgpackEncode: (data: any) => any;
 export declare enum urlGetCmd {
     HEXISTS = "HEXISTS",
     GET = "GET",

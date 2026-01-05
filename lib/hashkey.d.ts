@@ -31,7 +31,7 @@ export default class hashKey<T> {
      * @param opt Optional request options.
      * @returns Promise resolving to the number of fields that were added (1 if field is new, 0 if field was updated).
      */
-    hSet: (Field: string | undefined, data: T, opt?: RequestOptions) => Promise<number>;
+    hSet: (Field: string | undefined, data: T, opt?: RequestOptions) => Promise<T>;
     /**
      * (HGET) Gets the value of a field in the hash.
      * Assumes the value stored is of type `T` and will be deserialized.
@@ -87,9 +87,9 @@ export default class hashKey<T> {
      * Each value is assumed to be of type `T`.
      * @param data An object where each key is a field name and each value is the value (of type `T`) to set for that field.
      * @param opt Optional request options.
-     * @returns Promise resolving when the operation is successful (e.g., with void or a status string like "OK" from the API).
+     * @returns Promise resolving to an array of fields when the operation is successful (e.g., with void or a status string like "OK" from the API).
      */
-    hMSet: (data: Record<string, T>, opt?: RequestOptions) => Promise<void>;
+    hMSet: (data: Record<string, T>[], opt?: RequestOptions) => Promise<string[]>;
     /**
      * (HINCRBY) Atomically increments the integer value of a hash field by the given number.
      * If the field does not exist, it is set to 0 before performing the operation.

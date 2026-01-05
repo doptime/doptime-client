@@ -11,6 +11,7 @@ import createApi from "./api"
 var msgpack = require('@ygoe/msgpack');
 
 export const msgpackDecode = (data: any) => msgpack.decode(data);
+export const msgpackEncode = (data: any) => msgpack.encode(data);
 
 
 //const Url = "https://jp.voiceofai.cc"

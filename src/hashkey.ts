@@ -1,5 +1,6 @@
 import Req from "./http"; // Assuming Req is a function that handles HTTP requests and returns Promises
 import RequestOptions, { Opt } from "./config"; // Assuming RequestOptions and a default Opt instance
+import { msgpackEncode } from ".";
 
 export default class hashKey<T> {
     /**
@@ -39,7 +40,7 @@ export default class hashKey<T> {
      * @param opt Optional request options.
      * @returns Promise resolving to the number of fields that were added (1 if field is new, 0 if field was updated).
      */
-    public hSet = (Field: string = "", data: T, opt: RequestOptions = Opt): Promise<number> =>
+    public hSet = (Field: string = "", data: T, opt: RequestOptions = Opt): Promise<T> =>
         Req(opt).put(`${opt.baseUrl}/HSET-${this.key}?f=${encodeURIComponent(Field)}`, data);
 
     /**
@@ -111,10 +112,19 @@ export default class hashKey<T> {
      * Each value is assumed to be of type `T`.
      * @param data An object where each key is a field name and each value is the value (of type `T`) to set for that field.
      * @param opt Optional request options.
-     * @returns Promise resolving when the operation is successful (e.g., with void or a status string like "OK" from the API).
+     * @returns Promise resolving to an array of fields when the operation is successful (e.g., with void or a status string like "OK" from the API).
      */
-    public hMSet = (data: Record<string, T>, opt: RequestOptions = Opt): Promise<void> => // Or Promise<string> if API returns "OK"
-        Req(opt).put(`${opt.baseUrl}/HMSET-${this.key}`, data);
+    public hMSet = (data: Record<string, T>[], opt: RequestOptions = Opt): Promise<string[]> => {
+        var fields = Array<string>();
+        var values = Array<string>();
+        data.forEach((item) => {
+            for (let k in item) {
+                fields.push(k);
+                values.push(msgpackEncode(item[k]));
+            }
+        });
+        return Req(opt).put(`${opt.baseUrl}/HMSET-${this.key}?f=${encodeURIComponent(fields.join(","))}`, values);
+    }
 
     /**
      * (HINCRBY) Atomically increments the integer value of a hash field by the given number.
