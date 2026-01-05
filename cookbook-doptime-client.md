@@ -18,13 +18,14 @@ npm install doptime-client
 import { configure } from "doptime-client";
 
 configure({
-    urlBase: "https://api.myapp.com",
+    urlBase:  "https://api.myapp.com",
     // Token: Static string OR Async Function (resolved once at init)
     token: async () => await fetchToken(), 
     // Global Error Handler (e.g., 401 Redirect)
     primaryErrorHandler: (err) => { if (err.response?.status === 401) location.href = "/login"; },
     allowThrowError: false
 });
+
 
 ```
 
@@ -36,12 +37,19 @@ configure({
 import { hashKey } from "doptime-client";
 interface User { name: string; age: number; theme?: string }
 
-const user = new hashKey<User>("user:1001"); // Key: "user:1001"
-await user.hSet("name", "Alex");             // Set field
-const val = await user.hGet("name");         // Get field
-const all = await user.hGetAll();            // Get all fields
-await user.hMSet({ theme: "dark", age: 30 });
+const user = new hashKey<User>("user:1001");     // Key: "user:1001"
+
+// hSet returns the data object (T) that was set
+const savedData = await user.hSet("name", "Alex"); 
+
+const val = await user.hGet("name");             // Get field
+const all = await user.hGetAll();                // Get all fields
+
+// hMSet takes an array of objects and returns the keys (string[]) added/updated
+const keys = await user.hMSet([{ theme: "dark", age: 30 }]);
+
 await user.hIncrBy("login_count", 1);
+
 
 ```
 
@@ -55,6 +63,7 @@ await queue.lPush("job1");               // Push Head
 const item = await queue.rPop();         // Pop Tail
 const items = await queue.lRange(0, -1); // Get All
 
+
 ```
 
 ### ZSetKey (Leaderboards)
@@ -66,6 +75,7 @@ const lb = new zSetKey<string>("game:rank");
 await lb.zAdd(100, "player1");
 const top10 = await lb.zRevRange(0, 9, true); // [val, score, val, score...]
 
+
 ```
 
 ### StringKey (Simple KV)
@@ -76,6 +86,7 @@ import { stringKey } from "doptime-client";
 const config = new stringKey<string>("site:mode");
 await config.set("", "maintenance"); // Field defaults to ""
 const val = await config.get("");
+
 
 ```
 
@@ -91,6 +102,7 @@ await tags.sIsMember("tech");
 // Stream
 const logs = new streamKey<any>("logs");
 await logs.xAdd("", "*", { evt: "login" });
+
 
 ```
 
@@ -110,15 +122,15 @@ const url = urlGet(
 );
 // 2. Use directly in JSX/HTML
 // <img src={avatarUrl} alt="User Avatar" />
+
 ```
 
 **Supported Content Types:**
 
-  * `Opt.WithResponseAsJpeg()`
-  * `Opt.WithResponseAsOgg()` (Audio)
-  * `Opt.WithResponseAsMp4()` (Video)
-  * `Opt.WithResponseAsJson()` (Default)
-```
+* `Opt.WithResponseAsJpeg()`
+* `Opt.WithResponseAsOgg()` (Audio)
+* `Opt.WithResponseAsMp4()` (Video)
+* `Opt.WithResponseAsJson()` (Default)
 
 ## 4. Backend RPC
 
@@ -134,6 +146,7 @@ const callProcess = createApi<In, Out>("api:process");
 
 // Invoke
 const res = await callProcess({ id: "123" });
+
 
 ```
 
@@ -153,6 +166,7 @@ const settings = user.ConcatKey("1001", "settings");
 
 // Per-Request Options
 await settings.hGetAll(Opt.WithDataSource("cache_db"));
+
 
 ```
 
